@@ -1,7 +1,7 @@
 # PRM391
 
 ## Install Dependencies
-yarn install
+```yarn install```
 
 ## Run project
-npx react-native run-android
+```npx react-native run-android```
