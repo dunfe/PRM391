@@ -1,9 +1,17 @@
 import React from 'react';
-import HelloWorld from './src/containers/HelloWorldContainer';
+import Auth from './src/screen/Auth';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
 
 const App: React.FC = () => {
   return (
-    <HelloWorld/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Auth" component={Auth}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
