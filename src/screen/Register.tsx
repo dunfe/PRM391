@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Alert} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {
   Container,
@@ -10,24 +10,17 @@ import {
   Input,
   Text,
 } from 'native-base';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {host} from '../constants/host';
 
-type AuthScreenProps = StackNavigationProp<any, any>;
-
-interface IProps {
-  navigation: AuthScreenProps,
-}
-
-const Login = ({navigation, ...props}: IProps) => {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [user, setUser] = useState('');
 
-  const loginAsync = async () => {
+  const registerAsync = async () => {
     try {
-      await fetch(host + '/api/v1/identity/login', {
+      await fetch(host + '/api/v1/identity/register', {
         method: 'POST',
         headers: {
           'Accept': '*/*',
@@ -41,6 +34,7 @@ const Login = ({navigation, ...props}: IProps) => {
         if (response.status === 200) {
           const json = await response.json();
           setUser(json.jwtToken);
+          Alert.alert('Success');
         } else {
           Alert.alert('Error: Code ' + response.status);
         }
@@ -54,15 +48,9 @@ const Login = ({navigation, ...props}: IProps) => {
     }
   };
 
-  useEffect(() => {
-    if (user !== '') {
-      navigation.navigate('Secured', {jwt: user});
-    }
-  }, [user]);
-
-  const loginClick = async () => {
-    setMessage('Login...');
-    await loginAsync();
+  const registerClick = async () => {
+    setMessage('Register...');
+    await registerAsync();
   };
   return (
     <Container>
@@ -88,10 +76,10 @@ const Login = ({navigation, ...props}: IProps) => {
         <Row size={25}>
           <Col>
             <Button primary
-              onPress={() => loginClick()}
+              onPress={() => registerClick()}
               style={styles.button}>
               <Text>
-                Login
+                Register
               </Text>
             </Button>
           </Col>
@@ -107,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Register;
