@@ -1,22 +1,26 @@
 import React, {useState} from 'react';
 import {StyleSheet, Alert} from 'react-native';
-import {Col, Row, Grid} from 'react-native-easy-grid';
 import {
-  Container,
   Button,
-  Content,
   Form,
   Item,
   Input,
   Text,
+  Label,
+  Icon,
+  StyleProvider,
 } from 'native-base';
 import {host} from '../constants/host';
+import getTheme from '../../native-base-theme/components';
+import customVariables from '../../native-base-theme/variables/platform';
+import * as Animatable from 'react-native-animatable';
 
 const Register = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [user, setUser] = useState('');
+  const [passwordView, setPasswordView] = useState(true);
+  const [passwordIcon, setPasswordIcon] = useState('eye-off');
+  const [emailValidation, setEmailValidation] = useState(false);
 
   const registerAsync = async () => {
     try {
@@ -27,71 +31,91 @@ const Register = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: username,
+          email: email,
           password: password,
         }),
       }).then(async (response) => {
         if (response.status === 200) {
           const json = await response.json();
-          setUser(json.jwtToken);
+          console.log(json);
           Alert.alert('Success');
         } else {
           Alert.alert('Error: Code ' + response.status);
         }
       }).catch((error) => {
-        setMessage(error.message);
+        console.log(error.message);
       });
     } catch (e) {
       console.log(e);
     } finally {
-      setMessage('Done');
+      console.log('Done');
     }
   };
 
   const registerClick = async () => {
-    setMessage('Register...');
     await registerAsync();
   };
+
+  const onEmailChange = (value: string) => {
+    // eslint-disable-next-line max-len
+    const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    setEmail(value);
+    setEmailValidation(reg.test(String(value).toLowerCase()));
+  };
+
+  const onEyePress = () => {
+    if (passwordIcon === 'eye') {
+      setPasswordIcon('eye-off');
+    } else {
+      setPasswordIcon('eye');
+    }
+    setPasswordView(!passwordView);
+  };
   return (
-    <Container>
-      <Grid>
-        <Row size={25}>
-          {message ? <Text>{message}</Text> : <Text> </Text>}
-          <Text>{user}</Text>
-        </Row>
-        <Row size={50}>
-          <Content>
-            <Form>
-              <Item>
-                <Input placeholder="username" value={username}
-                  onChangeText={(value) => setUsername(value)}/>
-              </Item>
-              <Item>
-                <Input placeholder="password" value={password}
-                  onChangeText={(value) => setPassword(value)}/>
-              </Item>
-            </Form>
-          </Content>
-        </Row>
-        <Row size={25}>
-          <Col>
-            <Button primary
-              onPress={() => registerClick()}
-              style={styles.button}>
-              <Text>
-                Register
-              </Text>
-            </Button>
-          </Col>
-        </Row>
-      </Grid>
-    </Container>
+    <Animatable.View style={styles.container} animation="bounceIn">
+      <Form>
+        <Item floatingLabel>
+          <Label>Email Address</Label>
+          <Input value={email}
+            onChangeText={(value) => onEmailChange(value)}/>
+          {emailValidation ? <Icon name='checkmark'
+            style={{color: '#FFC529'}}/> : email ? <Icon name='close'
+              style={{color: '#FE724C'}}/> : <Icon/>}
+        </Item>
+        <Item floatingLabel>
+          <Label>Password</Label>
+          <Input value={password}
+            secureTextEntry={passwordView}
+            onChangeText={(value) => setPassword(value)}/>
+          {password ? <Icon name={passwordIcon}
+            style={{color: '#FFC529'}}
+            onPress={onEyePress} /> : <Icon/>}
+        </Item>
+      </Form>
+      <StyleProvider style={getTheme(customVariables)}>
+        <Button primary rounded block
+          onPress={() => registerClick()}
+          style={styles.button}>
+          <Text>
+            Register
+          </Text>
+        </Button>
+      </StyleProvider>
+    </Animatable.View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor: 'transparent',
+  },
   button: {
-    margin: 10,
+    marginHorizontal: 10,
+    marginBottom: 20,
+    marginTop: 50,
   },
 });
 

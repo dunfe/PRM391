@@ -6,12 +6,23 @@ import 'react-native-gesture-handler';
 import Login from './src/screen/Login';
 import Register from './src/screen/Register';
 import Secured from './src/screen/Secured';
+
+// @TODO: This is to hide a Warning
+//  caused by NativeBase after upgrading to RN 0.62
+import {YellowBox} from 'react-native';
+
+YellowBox.ignoreWarnings([
+  'Animated: `useNativeDriver` was not specified. ' +
+  'This is a required option and must be explicitly set to `true` or `false`',
+]);
+// ------- END OF WARNING SUPPRESSION
+
 const Stack = createStackNavigator();
 
 const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Home" component={Auth}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Register" component={Register}/>
