@@ -1,29 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Alert, StyleSheet} from 'react-native';
-import {Col, Row, Grid} from 'react-native-easy-grid';
 import {
-  Container,
   Button,
-  Content,
   Form,
   Item,
   Input,
   Text,
+  Label,
+  Icon,
+  StyleProvider,
 } from 'native-base';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {host} from '../constants/host';
+import getTheme from '../../native-base-theme/components';
+import customVariables from '../../native-base-theme/variables/platform';
+import * as Animatable from 'react-native-animatable';
 
-type AuthScreenProps = StackNavigationProp<any, any>;
-
-interface IProps {
-  navigation: AuthScreenProps,
-}
-
-const Login = ({navigation, ...props}: IProps) => {
-  const [username, setUsername] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [user, setUser] = useState('');
+  const [passwordView, setPasswordView] = useState(true);
+  const [passwordIcon, setPasswordIcon] = useState('eye-off');
+  const [emailValidation, setEmailValidation] = useState(false);
 
   const loginAsync = async () => {
     try {
@@ -34,76 +31,94 @@ const Login = ({navigation, ...props}: IProps) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: username,
+          email: email,
           password: password,
         }),
       }).then(async (response) => {
         if (response.status === 200) {
           const json = await response.json();
-          setUser(json.jwtToken);
+          console.log(json);
         } else {
           Alert.alert('Error: Code ' + response.status);
         }
       }).catch((error) => {
-        setMessage(error.message);
+        console.log(error.message);
       });
     } catch (e) {
       console.log(e);
     } finally {
-      setMessage('Done');
+      console.log('Done');
     }
   };
 
-  useEffect(() => {
-    if (user !== '') {
-      navigation.navigate('Secured', {jwt: user});
+  const onEmailChange = (value: string) => {
+    // eslint-disable-next-line max-len
+    const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    setEmail(value);
+    setEmailValidation(reg.test(String(value).toLowerCase()));
+  };
+
+  const onEyePress = () => {
+    if (passwordIcon === 'eye') {
+      setPasswordIcon('eye-off');
+    } else {
+      setPasswordIcon('eye');
     }
-  }, [user]);
+    setPasswordView(!passwordView);
+  };
 
   const loginClick = async () => {
-    setMessage('Login...');
+    console.log('Login...');
     await loginAsync();
   };
   return (
-    <Container>
-      <Grid>
-        <Row size={25}>
-          {message ? <Text>{message}</Text> : <Text> </Text>}
-          <Text>{user}</Text>
-        </Row>
-        <Row size={50}>
-          <Content>
-            <Form>
-              <Item>
-                <Input placeholder="username" value={username}
-                  onChangeText={(value) => setUsername(value)}/>
-              </Item>
-              <Item>
-                <Input placeholder="password" value={password}
-                  onChangeText={(value) => setPassword(value)}/>
-              </Item>
-            </Form>
-          </Content>
-        </Row>
-        <Row size={25}>
-          <Col>
-            <Button primary
-              onPress={() => loginClick()}
-              style={styles.button}>
-              <Text>
-                Login
-              </Text>
-            </Button>
-          </Col>
-        </Row>
-      </Grid>
-    </Container>
+    <StyleProvider style={getTheme(customVariables)}>
+      <Animatable.View style={styles.container} animation="bounceIn">
+        <Form>
+          <Item floatingLabel>
+            <Label>Email Address</Label>
+            <Input value={email}
+              onChangeText={(value) => onEmailChange(value)}/>
+            {emailValidation ? <Icon name='checkmark'
+              style={{color: '#FFC529'}}/> : email ? <Icon name='close'
+                style={{color: '#FE724C'}}/> : <Icon/>}
+          </Item>
+          <Item floatingLabel>
+            <Label>Password</Label>
+            <Input value={password}
+              secureTextEntry={passwordView}
+              onChangeText={(value) => setPassword(value)}/>
+            {password ? <Icon name={passwordIcon}
+              style={{color: '#FFC529'}}
+              onPress={onEyePress} /> : <Icon/>}
+          </Item>
+        </Form>
+        <Button primary rounded block
+          onPress={() => loginClick()}
+          style={styles.button}>
+          <Text style={styles.text}>
+                  Login
+          </Text>
+        </Button>
+      </Animatable.View>
+    </StyleProvider>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 2,
+    justifyContent: 'flex-end',
+    position: 'relative',
+    backgroundColor: 'transparent',
+  },
+  text: {
+    color: 'white',
+  },
   button: {
-    margin: 10,
+    marginHorizontal: 10,
+    marginBottom: 20,
+    marginTop: 50,
   },
 });
 
