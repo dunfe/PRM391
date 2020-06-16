@@ -12,7 +12,7 @@ type AuthScreenProps = StackNavigationProp<any, any>;
 interface IProps {
   navigation: AuthScreenProps,
 }
-//Comment 
+//Comment a new hihi
 const Auth = ({navigation, ...props}: IProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
