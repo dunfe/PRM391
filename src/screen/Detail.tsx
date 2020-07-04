@@ -109,6 +109,17 @@ const Welcome = () => {
 
         </View>
 
+        <View style={styles.btnContainer}>
+         
+         <TouchableOpacity style={styles.btnAdd}>
+           <Text>
+             <IconAnt name="plus" color="black" size={15} />
+           </Text>
+         </TouchableOpacity>
+
+       </View>
+
+
 
       </View>
 
@@ -266,6 +277,12 @@ const styles = StyleSheet.create({
     color:'#D7D7D7',
     fontWeight:"bold",
   },  
+  btnAdd: {
+    padding: 15,
+    borderRadius: 30,
+    backgroundColor: '#FFC529',
+    
+  },
 });
 
 
