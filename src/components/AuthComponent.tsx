@@ -68,12 +68,12 @@ const AuthComponent = (props: IProps) => {
                 passwordView={props.passwordView}
                 passwordIcon={props.passwordIcon}
                 emailValidation={props.emailValidation}
-                onEmailChange={() => props.onEmailChange(props.email)}
+                onEmailChange={props.onEmailChange}
                 onEyePress={props.onEyePress}
                 loginClick={props.loginClick}
                 mode='login'
                 setMode={() => props.setMode('login')}
-                setPassword={() => props.setPassword(props.password)}/>}
+                setPassword={props.setPassword}/>}
             </Tab>
             <Tab heading="Register"
               activeTextStyle={{color: '#272D2F', fontWeight: 'bold'}}
@@ -85,12 +85,12 @@ const AuthComponent = (props: IProps) => {
                 passwordView={props.passwordView}
                 passwordIcon={props.passwordIcon}
                 emailValidation={props.emailValidation}
-                onEmailChange={() => props.onEmailChange(props.email)}
+                onEmailChange={props.onEmailChange}
                 onEyePress={props.onEyePress}
                 loginClick={props.loginClick}
                 mode='register'
                 setMode={() => props.setMode('register')}
-                setPassword={() => props.setPassword(props.password)}/>}
+                setPassword={props.setPassword}/>}
             </Tab>
           </Tabs>
         </Content>
