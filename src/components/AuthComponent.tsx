@@ -57,7 +57,8 @@ const AuthComponent = (props: IProps) => {
       <Container style={styles.container}>
         {showImage()}
         <Content style={styles.content}>
-          <Tabs tabBarUnderlineStyle={{backgroundColor: '#FFC529'}}>
+          <Tabs tabBarUnderlineStyle={styles.tabUnderStyle}
+          >
             <Tab heading="Login"
               activeTextStyle={{color: '#272D2F', fontWeight: 'bold'}}
               textStyle={{color: '#272D2F', fontSize: 12}}
@@ -101,15 +102,28 @@ const AuthComponent = (props: IProps) => {
 
 const styles = StyleSheet.create({
   container: {
-
   },
   content: {
+
+  },
+  tabs: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  tab: {
+
   },
   backgroundImage: {
     width: '100%',
     height: 370,
     resizeMode: 'cover',
+
   },
+  tabUnderStyle: {
+    backgroundColor: '#FFC529',
+    width: 100,
+    marginHorizontal: 50,
+  }
 });
 
 export default AuthComponent;
