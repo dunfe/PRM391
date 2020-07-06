@@ -12,7 +12,7 @@ type AuthScreenProps = StackNavigationProp<any, any>;
 interface IProps {
   navigation: AuthScreenProps,
 }
-
+//Comment a new hihi
 const Auth = ({navigation, ...props}: IProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -84,15 +84,15 @@ const Auth = ({navigation, ...props}: IProps) => {
   return (
     <AuthComponent email={email}
       mode={mode}
-      setMode={() => setMode(mode)}
+      setMode={setMode}
       password={password}
       passwordView={passwordView}
       passwordIcon={passwordIcon}
       emailValidation={emailValidation}
-      onEmailChange={() => onEmailChange(email)}
+      onEmailChange={onEmailChange}
       onEyePress={onEyePress}
       loginClick={loginClick}
-      setPassword={() => setPassword(password)}
+      setPassword={setPassword}
     />
   );
 };
