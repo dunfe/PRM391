@@ -8,6 +8,7 @@ import ProductList from './ProductList';
 // import {Icon} from 'native-base';
 // import MaterialCommunityIcons from 'react-native-vector-icons'
 import Icon from 'react-native-vector-icons/Feather';
+import CartScreen from './Cart';
 
 const ProductListDis = () => {
   return (
@@ -35,8 +36,8 @@ const Remark = () => {
 
 const Cart = () => {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Cart!</Text>
+    <View>
+      <CartScreen/>
     </View>
   );
 };

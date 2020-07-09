@@ -4,16 +4,16 @@ import React, {Component} from 'react';
 import {View, Image, Text, StyleSheet, ImageProps} from 'react-native';
 
 export default class Category extends Component<{
-  imgUri: ImageProps;
-  productName: String ;
-  description: String;
-  calories: String;
-  price: String;
+  imgUri: string;
+  productName: string ;
+  description: string;
+  calories: string;
+  price: string;
 }> {
   render() {
     return (
       <View style={styles.product}>
-        <Image style={styles.productImage} source={this.props.imgUri} />
+        <Image style={styles.productImage} source={require(this.props.imgUri)} />
         <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
           {this.props.productName}
         </Text>

@@ -11,21 +11,63 @@ import Category from '../components/CategoryList';
 import Product from '../components/Product';
 import {Icon} from 'native-base';
 
+const arrayProduct = [
+  {
+    id: 1,
+    uri: '../images/fried-chicken.png',
+    name: 'Fried Chicken',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    calories: '78',
+  },
+  {
+    id: 2,
+    uri: '../images/hotdog.png',
+    name: 'Fried Chicken',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    calories: '78',
+  },
+  {
+    id: 3,
+    uri: '../images/pizza.png',
+    name: 'Fried Chicken',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    calories: '78',
+  },
+];
+
 const ProductListScreen = () => {
+  const arrayDisplay = arrayProduct.map((item) => (
+    <View key={item.id}>
+      <Product
+        productName={item.name}
+        description={item.description}
+        price={item.price}
+        calories={item.calories}
+        imgUri={item.uri}
+      />
+    </View>
+  ));
   return (
     // Try setting `justifyContent` to `center`.
     // Try setting `flexDirection` to `row`.
     <View>
       <View style={styles.flexbox}>
-        <View
-          style={styles.box1}>
-          <Icon name='align-left' type='Feather'
-            style={{fontSize: 20, color: '#272D2F'}}/>
+        <View style={styles.box1}>
+          <Icon
+            name="align-left"
+            type="Feather"
+            style={{fontSize: 20, color: '#272D2F'}}
+          />
         </View>
-        <View
-          style={styles.box2}>
-          <Icon name='user' type='Feather'
-            style={{fontSize: 20, color: '#FFFFFF'}}/>
+        <View style={styles.box2}>
+          <Icon
+            name="user"
+            type="Feather"
+            style={{fontSize: 20, color: '#FFFFFF'}}
+          />
         </View>
       </View>
       <View
@@ -46,8 +88,11 @@ const ProductListScreen = () => {
             style={styles.textInput}></TextInput>
         </View>
         <View style={styles.searchOption}>
-          <Icon name='sliders' type='Feather'
-            style={{fontSize: 20, color: '#272D2F'}}/>
+          <Icon
+            name="sliders"
+            type="Feather"
+            style={{fontSize: 20, color: '#272D2F'}}
+          />
         </View>
       </View>
       <View style={{marginTop: 50}}></View>
@@ -67,7 +112,8 @@ const ProductListScreen = () => {
       </View>
       <View style={{marginTop: 15, marginRight: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Product
+          {arrayDisplay}
+          {/* <Product
             productName="Fried Chicken"
             description="Spicy fried chicken"
             price="9.80"
@@ -87,7 +133,7 @@ const ProductListScreen = () => {
             price="10.0"
             calories="100"
             imgUri={require('../images/pizza.png')}
-          />
+          /> */}
         </ScrollView>
       </View>
     </View>

@@ -25,6 +25,7 @@ const CartScreen = () => {
           />
         </View>
       </View>
+      <View style={{backgroundColor: 'red'}}></View>
       <View style={{marginTop: 150, marginBottom: 60}}>
         <ScrollView>
           <ProductInCart
