@@ -138,6 +138,7 @@ const array = [
     body: 'Spicy Chicken Sandwich',
     description: '65 Calories',
     price: '6.72',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
   {
     id: 2,
@@ -145,6 +146,7 @@ const array = [
     body: 'Spicy Chicken Sandwich',
     description: '65 Calories',
     price: '6.7',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
   {
     id: 3,
@@ -152,6 +154,7 @@ const array = [
     body: 'Spicy Chicken Sandwich',
     description: '65 Calories',
     price: '72',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
   {
     id: 4,
@@ -159,6 +162,7 @@ const array = [
     body: 'Spicy Chicken ',
     description: '65 Calories',
     price: '6.2',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
   {
     id: 5,
@@ -166,6 +170,7 @@ const array = [
     body: 'Spicy Chicken ',
     description: '65 Calories',
     price: '6.2',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
   {
     id: 6,
@@ -173,6 +178,7 @@ const array = [
     body: 'Spicy Chicken ',
     description: '65 Calories',
     price: '6.2',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
   {
     id: 7,
@@ -180,6 +186,7 @@ const array = [
     body: 'Spicy Chicken ',
     description: '65 Calories',
     price: '6.2',
+    imgUri: 'https://www.arcgis.com/sharing/rest/content/items/8f762395cd204552bb958ecb1b54339d/resources/1588745514029.jpeg?w=2932',
   },
 ];
 
@@ -248,7 +255,7 @@ const Search = () => {
             renderItem={({item, index}) => (
               <TouchableOpacity>
                 <View key={`${index}`} style={styles.foodContainer}>
-                  <Image source={require('../images/4.jpg')}
+                  <Image source={{uri: item.imgUri}}
                     resizeMode={'contain'}
                     style={styles.image}/>
                   <View>

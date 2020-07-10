@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import Secured from './src/screen/Secured';
 import Search from "./src/screen/Search";
+import Detail from "./src/screen/Detail";
 
 // @TODO: This is to hide a Warning
 //  caused by NativeBase after upgrading to RN 0.62
@@ -21,7 +22,7 @@ const App: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Search" component={Search}/>
+        <Stack.Screen name="Detail" component={Detail}/>
         <Stack.Screen name="Secured" component={Secured}/>
       </Stack.Navigator>
     </NavigationContainer>
