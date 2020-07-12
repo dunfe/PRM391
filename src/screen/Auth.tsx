@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AuthComponent from '../components/AuthComponent';
 import {host} from '../constants/host';
-import {Alert} from 'react-native';
+import {Toast} from "native-base";
 
 
 type AuthScreenProps = StackNavigationProp<any, any>;
@@ -47,14 +47,28 @@ const Auth = ({navigation, ...props}: IProps) => {
         if (response.status === 200) {
           const json = await response.json();
           console.log(json);
+          Toast.show({
+            text: "Login successfully!",
+            duration: 300,
+          });
+          navigation.navigate("List");
         } else {
-          Alert.alert('Error: Code ' + response.status);
+          Toast.show({
+            text: "Login fail!Error: Code " + response.status,
+            duration: 300,
+          });
         }
       }).catch((error) => {
-        console.log(error.message);
+        Toast.show({
+          text: error,
+          duration: 300,
+        });
       });
     } catch (e) {
-      console.log(e);
+      Toast.show({
+        text: e,
+        duration: 300,
+      });
     } finally {
       console.log('Done');
     }
