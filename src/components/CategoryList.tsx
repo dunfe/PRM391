@@ -1,26 +1,42 @@
 /* eslint-disable require-jsdoc */
 import React, {Component} from 'react';
 // eslint-disable-next-line no-unused-vars
-import {View, Image, Text, StyleSheet, ImageProps} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  ImageProps,
+  TouchableHighlight,
+  Alert,
+} from 'react-native';
 
-// eslint-disable-next-line max-len
-export default class Category extends Component<{
+interface IProps {
   imgUri: ImageProps;
   name: String;
-}> {
-  render() {
-    return (
+}
+
+// eslint-disable-next-line max-len
+const Category = (props: IProps) => {
+  const clickHandler = () => {
+    // function to handle click on floating Action Button
+    Alert.alert('Floating Button Clicked');
+  };
+  return (
+    <TouchableHighlight onPress={clickHandler} underlayColor='#F2F2F2'>
       <View style={styles.categoryStyle}>
         <View style={styles.ViewImage}>
-          <Image source={this.props.imgUri} style={styles.ImageCategoryStyle} />
+          <Image source={props.imgUri} style={styles.ImageCategoryStyle} />
         </View>
         <View style={styles.TextCategory}>
-          <Text>{this.props.name}</Text>
+          <Text>{props.name}</Text>
         </View>
       </View>
-    );
-  }
-}
+    </TouchableHighlight>
+  );
+};
+
+export default Category;
 
 const styles = StyleSheet.create({
   categoryStyle: {

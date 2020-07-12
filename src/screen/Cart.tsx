@@ -1,83 +1,51 @@
 import React from 'react';
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
-import ProductInCart from '../components/ProductInCart';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import {Icon} from 'native-base';
+import TopTab from '../components/TopTabbar';
 
 const CartScreen = () => {
+  const clickHandler = () => {
+    // function to handle click on floating Action Button
+    Alert.alert('Floating Button Clicked');
+  };
+
   return (
-    <View>
-      <View style={styles.flexbox}>
-        <View style={styles.box1}>
-          <Icon
-            name="chevron-left"
-            type="Feather"
-            style={{fontSize: 25, color: '#272D2F'}}
-          />
-        </View>
-        <View>
-          <Text style={styles.headerText}>Cart Food</Text>
-        </View>
-        <View style={styles.box2}>
-          <Icon
-            name="user"
-            type="Feather"
-            style={{fontSize: 20, color: '#FFFFFF'}}
-          />
+    <ScrollView
+      scrollEnabled={false}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
+      <View style={{backgroundColor: 'white'}}>
+        <View style={styles.flexbox}>
+          <TouchableOpacity style={styles.box1} onPress={clickHandler}>
+            <Icon
+              name="chevron-left"
+              type="Feather"
+              style={{fontSize: 25, color: '#272D2F'}}
+            />
+          </TouchableOpacity>
+          <View>
+            <Text style={styles.headerText}>Cart Food</Text>
+          </View>
+          <TouchableOpacity onPress={clickHandler} style={styles.box2}>
+            <View>
+              <Icon
+                name="user"
+                type="Feather"
+                style={{fontSize: 20, color: '#FFFFFF'}}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={{marginTop: 150, marginBottom: 60}}>
-        <ScrollView>
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <ProductInCart
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-        </ScrollView>
-      </View>
-    </View>
+      <TopTab />
+    </ScrollView>
   );
 };
 
@@ -86,11 +54,15 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
+    marginBottom: 10,
     flex: 1,
+    alignContent: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   box1: {
+    borderColor: '#272D2F',
+    borderWidth: 0.25,
     borderRadius: 10,
     width: 50,
     height: 50,
@@ -108,7 +80,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     // alignItems: 'center',
-    // justifyContent: 'center',
+    paddingTop: 5,
     fontSize: 25,
     fontWeight: 'bold',
   },
