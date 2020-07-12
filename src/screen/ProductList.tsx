@@ -6,31 +6,82 @@ import {
   TextInput,
   Image,
   ScrollView,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Category from '../components/CategoryList';
 import Product from '../components/Product';
 import {Icon} from 'native-base';
 
+const arrayProduct = [
+  {
+    id: 1,
+    productName: 'Fried Chicken',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    calories: '78',
+    imgUri: '../images/fried-chicken.png',
+  },
+  {
+    id: 2,
+    productName: 'Fried Chicken',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    calories: '78',
+    imgUri: '../images/fried-chicken.png',
+  },
+  {
+    id: 3,
+    productName: 'Fried Chicken',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    calories: '78',
+    imgUri: '../images/fried-chicken.png',
+  },
+];
+
+const displayArray = arrayProduct.map((item) => (
+  <View key={item.id}>
+    <Product
+      productName={item.productName}
+      description={item.description}
+      price={item.price}
+      calories={item.calories}
+      imgUri={require('../images/fried-chicken.png')}
+    />
+  </View>
+));
+
 const ProductListScreen = () => {
+  const clickHandler = () => {
+    // function to handle click on floating Action Button
+    Alert.alert('Floating Button Clicked');
+  };
   return (
     // Try setting `justifyContent` to `center`.
     // Try setting `flexDirection` to `row`.
-    <View>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
       <View style={styles.flexbox}>
-        <View
-          style={styles.box1}>
-          <Icon name='align-left' type='Feather'
-            style={{fontSize: 20, color: '#272D2F'}}/>
-        </View>
-        <View
-          style={styles.box2}>
-          <Icon name='user' type='Feather'
-            style={{fontSize: 20, color: '#FFFFFF'}}/>
-        </View>
+        <TouchableOpacity style={styles.box1}>
+          <Icon
+            name="align-left"
+            type="Feather"
+            style={{fontSize: 20, color: '#272D2F'}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.box2}>
+          <Icon
+            name="user"
+            type="Feather"
+            style={{fontSize: 20, color: '#FFFFFF'}}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
-          marginTop: 80,
+          marginTop: 35,
         }}>
         <Text style={styles.topText}>Lets eat</Text>
         <Text style={styles.topText}>Quality food 😋</Text>
@@ -45,12 +96,14 @@ const ProductListScreen = () => {
             placeholder="Search food"
             style={styles.textInput}></TextInput>
         </View>
-        <View style={styles.searchOption}>
-          <Icon name='sliders' type='Feather'
-            style={{fontSize: 20, color: '#272D2F'}}/>
-        </View>
+        <TouchableOpacity style={styles.searchOption}>
+          <Icon
+            name="sliders"
+            type="Feather"
+            style={{fontSize: 20, color: '#272D2F'}}
+          />
+        </TouchableOpacity>
       </View>
-      <View style={{marginTop: 50}}></View>
       <View style={{marginTop: 20, marginRight: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <Category
@@ -67,7 +120,8 @@ const ProductListScreen = () => {
       </View>
       <View style={{marginTop: 15, marginRight: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Product
+          {displayArray}
+          {/* <Product
             productName="Fried Chicken"
             description="Spicy fried chicken"
             price="9.80"
@@ -87,10 +141,10 @@ const ProductListScreen = () => {
             price="10.0"
             calories="100"
             imgUri={require('../images/pizza.png')}
-          />
+          /> */}
         </ScrollView>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -116,7 +170,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: 250,
     borderRadius: 15,
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#e3e3e3',
   },
   searchOption: {
     marginRight: 40,
@@ -160,7 +214,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#e3e3e3',
+    // borderWidth: 1,
+    // borderColor: 'red',
     height: 55,
     borderRadius: 15,
   },

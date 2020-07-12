@@ -1,49 +1,52 @@
 /* eslint-disable require-jsdoc */
-import React, {Component} from 'react';
+import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import {View, Image, Text, StyleSheet, ImageProps} from 'react-native';
 
-export default class Category extends Component<{
+interface IProps {
   imgUri: ImageProps;
-  productName: String ;
-  description: String;
-  calories: String;
-  price: String;
-}> {
-  render() {
-    return (
-      <View style={styles.product}>
-        <Image style={styles.productImage} source={this.props.imgUri} />
-        <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
-          {this.props.productName}
-        </Text>
-        <Text style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
-          {this.props.description}
-        </Text>
-        <View style={{marginTop: 5, flex: 1, flexDirection: 'row'}}>
-          <Image
-            style={styles.fireImgage}
-            source={require('../images/fire.png')}
-          />
-          <Text style={styles.calories}>{this.props.calories} Calories</Text>
-        </View>
-        <View
-          style={{
-            marginBottom: 15,
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Image
-            style={styles.coinImg}
-            source={require('../images/money.png')}
-          />
-          <Text style={styles.price}>{this.props.price}</Text>
-        </View>
-      </View>
-    );
-  }
+  productName: string ;
+  description: string;
+  calories: string;
+  price: string;
 }
+
+const product = (props: IProps) => {
+  return (
+    <View style={styles.product}>
+      <Image style={styles.productImage}
+        source={props.imgUri} />
+      <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
+        {props.productName}
+      </Text>
+      <Text style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
+        {props.description}
+      </Text>
+      <View style={{marginTop: 5, flex: 1, flexDirection: 'row'}}>
+        <Image
+          style={styles.fireImgage}
+          source={require('../images/fire.png')}
+        />
+        <Text style={styles.calories}>{props.calories} Calories</Text>
+      </View>
+      <View
+        style={{
+          marginBottom: 15,
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <Image
+          style={styles.coinImg}
+          source={require('../images/money.png')}
+        />
+        <Text style={styles.price}>{props.price}</Text>
+      </View>
+    </View>
+  );
+};
+
+export default product;
 
 const styles = StyleSheet.create({
   price: {
@@ -70,6 +73,7 @@ const styles = StyleSheet.create({
     width: 150,
   },
   product: {
+    backgroundColor: 'white',
     // shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,

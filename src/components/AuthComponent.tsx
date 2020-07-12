@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFC529',
     width: 100,
     marginHorizontal: 50,
-  }
+  },
 });
 
 export default AuthComponent;

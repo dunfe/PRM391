@@ -5,7 +5,7 @@ import {View, Image, StyleSheet, Text, ImageProps} from 'react-native';
 import React, {Component} from 'react';
 import InputSpinner from 'react-native-input-spinner';
 
-export default class Category extends Component<{
+export default class ProductInCart extends Component<{
   imgUri: ImageProps;
   productName: String;
   description: String;
@@ -14,7 +14,7 @@ export default class Category extends Component<{
   // eslint-disable-next-line require-jsdoc
   render() {
     return (
-      <View style={{height: 130, marginBottom: 20}}>
+      <View style={{height: 130}}>
         <View style={styles.product}>
           <View>
             <Image style={styles.productImage} source={this.props.imgUri} />
@@ -40,13 +40,14 @@ export default class Category extends Component<{
               <Text style={styles.price}>{this.props.price}</Text>
               <View style={styles.inputSpinner}>
                 <InputSpinner
+                  inputStyle={{width: 30}}
                   max={100}
                   min={1}
                   step={1}
-                  width={100}
-                  height={40}
-                  fontSize={15}
-                  background={'#FFC529'}
+                  width={110}
+                  height={37}
+                  fontSize={13}
+                  // background={'#FFC529'}
                   buttonTextColor={'#272D2F'}
                   buttonFontSize={15}
                   color={'#FFC529'}
