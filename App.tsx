@@ -5,6 +5,10 @@ import 'react-native-gesture-handler';
 // import Secured from './src/screen/Secured';
 // import Search from "./src/screen/Search";
 import Home from "./src/screen/ScreenHome";
+import Secured from './src/screen/Secured';
+import Search from "./src/screen/Search";
+import Detail from "./src/screen/Detail";
+
 // @TODO: This is to hide a Warning
 //  caused by NativeBase after upgrading to RN 0.62
 import {YellowBox} from 'react-native';
@@ -23,7 +27,8 @@ const App: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="Search" component={Home}/>
-        {/* <Stack.Screen name="Secured" component={Secured}/> */}
+        <Stack.Screen name="Detail" component={Detail}/>
+        <Stack.Screen name="Secured" component={Secured}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
