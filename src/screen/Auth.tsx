@@ -5,12 +5,19 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import AuthComponent from '../components/AuthComponent';
 import {host} from '../constants/host';
 import {Toast} from "native-base";
-
+import {useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
+import {signIn} from "../redux/login";
 
 type AuthScreenProps = StackNavigationProp<any, any>;
 
 interface IProps {
   navigation: AuthScreenProps,
+}
+interface Login {
+  login: {
+    jwtToken: string,
+  }
 }
 
 const Auth = ({navigation, ...props}: IProps) => {
@@ -20,6 +27,8 @@ const Auth = ({navigation, ...props}: IProps) => {
   const [passwordIcon, setPasswordIcon] = useState('eye-off');
   const [emailValidation, setEmailValidation] = useState(false);
   const [mode, setMode] = useState('login');
+  const user = useSelector((state: Login) => state.login);
+  const dispatch = useDispatch();
 
   let modeURL = '/api/v1/identity/login';
   useEffect(() => {
@@ -46,12 +55,11 @@ const Auth = ({navigation, ...props}: IProps) => {
       }).then(async (response) => {
         if (response.status === 200) {
           const json = await response.json();
-          console.log(json);
-          Toast.show({
-            text: "Login successfully!",
-            duration: 300,
-          });
-          navigation.navigate("List");
+          dispatch(
+              signIn({
+                jwtToken: json,
+              }),
+          );
         } else {
           Toast.show({
             text: "Login fail!Error: Code " + response.status,
@@ -59,16 +67,10 @@ const Auth = ({navigation, ...props}: IProps) => {
           });
         }
       }).catch((error) => {
-        Toast.show({
-          text: error,
-          duration: 300,
-        });
+        console.log(error);
       });
     } catch (e) {
-      Toast.show({
-        text: e,
-        duration: 300,
-      });
+      console.log(e);
     } finally {
       console.log('Done');
     }
@@ -94,6 +96,15 @@ const Auth = ({navigation, ...props}: IProps) => {
     console.log('Login...');
     await loginAsync();
   };
+
+  useEffect(() => {
+    const checkLogin = () => {
+      if (user.jwtToken !== "") {
+        navigation.navigate("List");
+      }
+    };
+    checkLogin();
+  }, [user]);
 
   return (
     <AuthComponent email={email}

@@ -94,7 +94,7 @@ const ProductListScreen = () => {
           />
           <TextInput
             placeholder="Search food"
-            style={styles.textInput}></TextInput>
+            style={styles.textInput}/>
         </View>
         <TouchableOpacity style={styles.searchOption}>
           <Icon
