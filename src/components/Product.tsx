@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 150,
     width: 150,
+    borderRadius: 400
   },
   product: {
     backgroundColor: 'white',
