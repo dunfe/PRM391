@@ -1,11 +1,11 @@
 /* eslint-disable require-jsdoc */
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
-import {View, Image, Text, StyleSheet} from 'react-native';
+import { View, Image, Text, StyleSheet } from 'react-native';
 
 interface IProps {
   imgUri: string;
-  productName: string ;
+  productName: string;
   description: string;
   calories: number;
   price: number;
@@ -15,14 +15,14 @@ const product = (props: IProps) => {
   return (
     <View style={styles.product}>
       <Image style={styles.productImage}
-        source={{uri: props.imgUri}} />
-      <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
+        source={{ uri: props.imgUri }} />
+      <Text numberOfLines={1} style={{ marginTop: 10, fontSize: 19, fontWeight: 'bold' }}>
         {props.productName}
       </Text>
-      <Text style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
+      <Text numberOfLines={1} style={{ marginTop: 5, fontSize: 15, color: '#c9c9c9' }}>
         {props.description}
       </Text>
-      <View style={{marginTop: 5, flex: 1, flexDirection: 'row'}}>
+      <View style={{ marginTop: 5, flex: 1, flexDirection: 'row' }}>
         <Image
           style={styles.fireImgage}
           source={require('../images/fire.png')}
@@ -50,9 +50,9 @@ export default product;
 
 const styles = StyleSheet.create({
   price: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: 'bold',
-    paddingLeft: 10,
+    marginTop: 5
   },
   coinImg: {
     height: 20,
@@ -90,5 +90,6 @@ const styles = StyleSheet.create({
     borderColor: '#D7D7D7',
     borderWidth: 1.5,
     borderRadius: 30,
+    padding: 5
   },
 });
