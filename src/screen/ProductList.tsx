@@ -110,14 +110,14 @@ const ProductListScreen = () => {
           <Icon
             name="align-left"
             type="Feather"
-            style={{fontSize: 20, color: '#272D2F'}}
+            style={{ fontSize: 20, color: '#272D2F' }}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.box2}>
           <Icon
             name="user"
             type="Feather"
-            style={{fontSize: 20, color: '#FFFFFF'}}
+            style={{ fontSize: 20, color: '#FFFFFF' }}
           />
         </TouchableOpacity>
       </View>
@@ -136,20 +136,14 @@ const ProductListScreen = () => {
           />
           <TextInput
             placeholder="Search food"
-            style={styles.textInput}/>
+            style={styles.textInput} />
         </View>
-        <TouchableOpacity style={styles.searchOption}>
-          <Icon
-            name="sliders"
-            type="Feather"
-            style={{fontSize: 20, color: '#272D2F'}}
-          />
-        </TouchableOpacity>
+
       </View>
       <View style={{marginTop: 20, marginRight: 20}}>
         {categoriesList()}
       </View>
-      <View style={{marginTop: 15, marginRight: 20}}>
+      <View style={{ marginTop: 15, marginRight: 20 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {displayArray}
         </ScrollView>
@@ -220,7 +214,7 @@ const styles = StyleSheet.create({
   },
 
   SectionStyle: {
-    width: 275,
+    width: '95%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
