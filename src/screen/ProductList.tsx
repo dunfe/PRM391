@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,59 +7,101 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import Category from '../components/CategoryList';
 import Product from '../components/Product';
 import {Icon} from 'native-base';
+import {host} from "../constants/host";
+import {useSelector} from "react-redux";
 
-const arrayProduct = [
-  {
-    id: 1,
-    productName: 'Fried Chicken',
-    description: 'Spicy fried chicken',
-    price: '9.80',
-    calories: '78',
-    imgUri: '../images/fried-chicken.png',
-  },
-  {
-    id: 2,
-    productName: 'Fried Chicken',
-    description: 'Spicy fried chicken',
-    price: '9.80',
-    calories: '78',
-    imgUri: '../images/fried-chicken.png',
-  },
-  {
-    id: 3,
-    productName: 'Fried Chicken',
-    description: 'Spicy fried chicken',
-    price: '9.80',
-    calories: '78',
-    imgUri: '../images/fried-chicken.png',
-  },
-];
+interface Login {
+    login: {
+        jwtToken: string,
+    }
+}
 
-const displayArray = arrayProduct.map((item) => (
-  <View key={item.id}>
-    <Product
-      productName={item.productName}
-      description={item.description}
-      price={item.price}
-      calories={item.calories}
-      imgUri={require('../images/fried-chicken.png')}
-    />
-  </View>
-));
+interface Category {
+    categoryId: number,
+    categoryName: string,
+    categoryImage: string,
+}
+interface Product {
+  productId: number,
+  productName: string,
+  shortDescription: string,
+  detail: string,
+  calories: number,
+  price: number,
+  productImage: string,
+  timeToMake: number,
+  categoryId: number,
+
+}
 
 const ProductListScreen = () => {
-  const clickHandler = () => {
-    // function to handle click on floating Action Button
-    Alert.alert('Floating Button Clicked');
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const user = useSelector((state: Login) => state.login);
+
+  fetch(host + '/api/v1/categories', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'bearer ' + user.jwtToken,
+    },
+  })
+      .then((response) => response.json())
+      .then(async (data) => {
+        await setCategories(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+  fetch(host + '/api/v1/products', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'bearer ' + user.jwtToken,
+    },
+  })
+      .then((response) => response.json())
+      .then(async (data) => {
+        await setProducts(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+  const displayArray = products.map((item) => (
+    <View key={item.productId}>
+      <Product
+        productName={item.productName}
+        description={item.shortDescription}
+        price={item.price}
+        calories={item.calories}
+        imgUri={item.productImage}
+      />
+    </View>
+  ));
+
+  const categoriesList = () => {
+    const thisCategoriesList = categories.map((item) => {
+      return (
+        <Category
+          key={item.categoryId}
+          imgUri={item.categoryImage}
+          name={item.categoryName}
+        />
+      );
+    });
+    return (
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {thisCategoriesList}
+      </ScrollView>
+    );
   };
   return (
-    // Try setting `justifyContent` to `center`.
-    // Try setting `flexDirection` to `row`.
     <ScrollView
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
@@ -105,43 +147,11 @@ const ProductListScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={{marginTop: 20, marginRight: 20}}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Category
-            imgUri={require('../images/fast-food.png')}
-            name="Fast food"
-          />
-          <Category imgUri={require('../images/bread.png')} name="Bread" />
-          <Category
-            imgUri={require('../images/vegetable.png')}
-            name="Vegetable"
-          />
-          <Category imgUri={require('../images/fruit.png')} name="Fruit" />
-        </ScrollView>
+        {categoriesList()}
       </View>
       <View style={{marginTop: 15, marginRight: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {displayArray}
-          {/* <Product
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            calories="78"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <Product
-            productName="Hot dog"
-            description="Spicy hot dog"
-            price="7.0"
-            calories="69"
-            imgUri={require('../images/hotdog.png')}
-          />
-          <Product
-            productName="Pizza"
-            description="Sea food pizza"
-            price="10.0"
-            calories="100"
-            imgUri={require('../images/pizza.png')}
-          /> */}
         </ScrollView>
       </View>
     </ScrollView>

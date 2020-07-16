@@ -1,19 +1,18 @@
 /* eslint-disable require-jsdoc */
-import React, {Component} from 'react';
+import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import {
   View,
   Image,
   Text,
   StyleSheet,
-  ImageProps,
   TouchableHighlight,
   Alert,
 } from 'react-native';
 
 interface IProps {
-  imgUri: ImageProps;
-  name: String;
+  imgUri: string;
+  name: string;
 }
 
 // eslint-disable-next-line max-len
@@ -22,11 +21,17 @@ const Category = (props: IProps) => {
     // function to handle click on floating Action Button
     Alert.alert('Floating Button Clicked');
   };
+  const thisImage =
+      props.imgUri ?
+          props.imgUri :
+          '../images/pizza.png';
   return (
-    <TouchableHighlight onPress={clickHandler} underlayColor='#F2F2F2'>
+    <TouchableHighlight
+      onPress={clickHandler} underlayColor='#F2F2F2'>
       <View style={styles.categoryStyle}>
         <View style={styles.ViewImage}>
-          <Image source={props.imgUri} style={styles.ImageCategoryStyle} />
+          <Image source={{uri: thisImage}}
+            style={styles.ImageCategoryStyle} />
         </View>
         <View style={styles.TextCategory}>
           <Text>{props.name}</Text>

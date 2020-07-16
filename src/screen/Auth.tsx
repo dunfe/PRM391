@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import {StackNavigationProp} from '@react-navigation/stack';
 import AuthComponent from '../components/AuthComponent';
 import {host} from '../constants/host';
-import {Toast} from "native-base";
-import {useSelector} from "react-redux";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {signIn} from "../redux/login";
+import {Alert} from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 
 type AuthScreenProps = StackNavigationProp<any, any>;
 
@@ -40,6 +40,29 @@ const Auth = ({navigation, ...props}: IProps) => {
     console.log(mode);
   }, [mode]);
 
+  const storeToken = async (token: string) => {
+    try {
+      await AsyncStorage.setItem('token', token);
+    } catch (e) {
+      console.log('Something wrong', e);
+    }
+  };
+
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (token !== null) {
+        dispatch(
+            signIn({
+              jwtToken: token,
+            }),
+        );
+      }
+    } catch (e) {
+      console.log("Something wrong " + e);
+    }
+  };
+
   const loginAsync = async () => {
     try {
       await fetch(host + modeURL, {
@@ -54,23 +77,26 @@ const Auth = ({navigation, ...props}: IProps) => {
         }),
       }).then(async (response) => {
         if (response.status === 200) {
-          const json = await response.json();
-          dispatch(
-              signIn({
-                jwtToken: json,
-              }),
-          );
+          if (mode === 'login') {
+            const json = await response.json();
+            dispatch(
+                signIn({
+                  jwtToken: json.jwtToken,
+                }),
+            );
+            await storeToken(json.jwtToken);
+          } else {
+            Alert.alert("Register successful, please login!");
+            navigation.navigate("Auth");
+          }
         } else {
-          Toast.show({
-            text: "Login fail!Error: Code " + response.status,
-            duration: 300,
-          });
+          Alert.alert("error: " + response.status);
         }
       }).catch((error) => {
-        console.log(error);
+        Alert.alert(error);
       });
     } catch (e) {
-      console.log(e);
+      Alert.alert(e);
     } finally {
       console.log('Done');
     }
@@ -96,6 +122,10 @@ const Auth = ({navigation, ...props}: IProps) => {
     console.log('Login...');
     await loginAsync();
   };
+
+  useEffect(() => {
+    getToken().then((r) => console.log(r));
+  }, []);
 
   useEffect(() => {
     const checkLogin = () => {

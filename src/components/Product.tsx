@@ -1,21 +1,21 @@
 /* eslint-disable require-jsdoc */
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
-import {View, Image, Text, StyleSheet, ImageProps} from 'react-native';
+import {View, Image, Text, StyleSheet} from 'react-native';
 
 interface IProps {
-  imgUri: ImageProps;
+  imgUri: string;
   productName: string ;
   description: string;
-  calories: string;
-  price: string;
+  calories: number;
+  price: number;
 }
 
 const product = (props: IProps) => {
   return (
     <View style={styles.product}>
       <Image style={styles.productImage}
-        source={props.imgUri} />
+        source={{uri: props.imgUri}} />
       <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
         {props.productName}
       </Text>

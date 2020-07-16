@@ -1,4 +1,4 @@
-import { createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 const initialState = {
   "jwtToken": "",
@@ -8,8 +8,8 @@ const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    signIn(state, action) {
-      state.jwtToken=action.payload;
+    signIn(state, action: PayloadAction<{ jwtToken: string }>) {
+      state.jwtToken = action.payload.jwtToken;
     },
   },
 });
