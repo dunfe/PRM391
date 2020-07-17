@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,20 +10,20 @@ import {
 } from 'react-native';
 import Category from '../components/CategoryList';
 import Product from '../components/Product';
-import {Icon} from 'native-base';
-import {host} from "../constants/host";
-import {useSelector} from "react-redux";
+import { Icon } from 'native-base';
+import { host } from "../constants/host";
+import { useSelector } from "react-redux";
 
 interface Login {
-    login: {
-        jwtToken: string,
-    }
+  login: {
+    jwtToken: string,
+  }
 }
 
 interface Category {
-    categoryId: number,
-    categoryName: string,
-    categoryImage: string,
+  categoryId: number,
+  categoryName: string,
+  categoryImage: string,
 }
 interface Product {
   productId: number,
@@ -50,13 +50,13 @@ const ProductListScreen = () => {
       'Authorization': 'bearer ' + user.jwtToken,
     },
   })
-      .then((response) => response.json())
-      .then(async (data) => {
-        await setCategories(data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    .then((response) => response.json())
+    .then(async (data) => {
+      await setCategories(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 
   fetch(host + '/api/v1/products', {
     method: 'GET',
@@ -65,13 +65,13 @@ const ProductListScreen = () => {
       'Authorization': 'bearer ' + user.jwtToken,
     },
   })
-      .then((response) => response.json())
-      .then(async (data) => {
-        await setProducts(data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    .then((response) => response.json())
+    .then(async (data) => {
+      await setProducts(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 
   const displayArray = products.map((item) => (
     <View key={item.productId}>
@@ -140,7 +140,7 @@ const ProductListScreen = () => {
         </View>
 
       </View>
-      <View style={{marginTop: 20, marginRight: 20}}>
+      <View style={{ marginTop: 20, marginRight: 20 }}>
         {categoriesList()}
       </View>
       <View style={{ marginTop: 15, marginRight: 20 }}>
