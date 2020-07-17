@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import Category from '../components/CategoryList';
 import Product from '../components/Product';
-import { Icon } from 'native-base';
-import { host } from "../constants/host";
-import { useSelector } from "react-redux";
+import {Icon} from 'native-base';
+import {host} from "../constants/host";
+import {useSelector} from "react-redux";
 
 interface Login {
   login: {
@@ -43,36 +43,6 @@ const ProductListScreen = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const user = useSelector((state: Login) => state.login);
 
-  fetch(host + '/api/v1/categories', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'bearer ' + user.jwtToken,
-    },
-  })
-    .then((response) => response.json())
-    .then(async (data) => {
-      await setCategories(data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-
-  fetch(host + '/api/v1/products', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'bearer ' + user.jwtToken,
-    },
-  })
-    .then((response) => response.json())
-    .then(async (data) => {
-      await setProducts(data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-
   const displayArray = products.map((item) => (
     <View key={item.productId}>
       <Product
@@ -95,6 +65,43 @@ const ProductListScreen = () => {
         />
       );
     });
+
+    useEffect(() => {
+      const getCategories = () => {
+        fetch(host + '/api/v1/categories', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => response.json())
+            .then(async (data) => {
+              await setCategories(data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+      };
+      const getProducts = () => {
+        fetch(host + '/api/v1/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => response.json())
+            .then(async (data) => {
+              await setProducts(data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+      };
+      getCategories();
+      getProducts();
+    }, []);
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {thisCategoriesList}
@@ -110,14 +117,14 @@ const ProductListScreen = () => {
           <Icon
             name="align-left"
             type="Feather"
-            style={{ fontSize: 20, color: '#272D2F' }}
+            style={{fontSize: 20, color: '#272D2F'}}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.box2}>
           <Icon
             name="user"
             type="Feather"
-            style={{ fontSize: 20, color: '#FFFFFF' }}
+            style={{fontSize: 20, color: '#FFFFFF'}}
           />
         </TouchableOpacity>
       </View>
@@ -140,10 +147,10 @@ const ProductListScreen = () => {
         </View>
 
       </View>
-      <View style={{ marginTop: 20, marginRight: 20 }}>
+      <View style={{marginTop: 20, marginRight: 20}}>
         {categoriesList()}
       </View>
-      <View style={{ marginTop: 15, marginRight: 20 }}>
+      <View style={{marginTop: 15, marginRight: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {displayArray}
         </ScrollView>
@@ -177,8 +184,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#e3e3e3',
   },
   searchOption: {
-    marginRight: 40,
-    borderRadius: 15,
+    marginRight: 0,
+    borderRadius: 0,
     width: 55,
     height: 55,
     backgroundColor: '#FFC529',
