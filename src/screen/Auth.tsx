@@ -6,8 +6,10 @@ import AuthComponent from '../components/AuthComponent';
 import {host} from '../constants/host';
 import {useDispatch, useSelector} from "react-redux";
 import {signIn} from "../redux/login";
-import {Alert} from "react-native";
+import {Alert, Image, ImageBackground, StatusBar, StyleSheet, Text, View} from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
+import {slides} from "../constants/sliders";
+import AppIntroSlider from "react-native-app-intro-slider";
 
 type AuthScreenProps = StackNavigationProp<any, any>;
 
@@ -29,6 +31,18 @@ const Auth = ({navigation, ...props}: IProps) => {
   const [mode, setMode] = useState('login');
   const user = useSelector((state: Login) => state.login);
   const dispatch = useDispatch();
+  const [welcome, setWelcome] = useState(false);
+  const onDone = () => {
+    setWelcome(true);
+  };
+  const _renderItem = ({item}: {item: Item}) => {
+    return (
+      <ImageBackground style={styles.slide} source={item.image}>
+        <Text style={styles.text}>{item.text}</Text>
+      </ImageBackground>
+    );
+  };
+  const _keyExtractor = (item: Item) => item.title;
 
   let modeURL = '/api/v1/identity/login';
   useEffect(() => {
@@ -136,23 +150,62 @@ const Auth = ({navigation, ...props}: IProps) => {
     checkLogin();
   }, [user]);
 
-  return (
-    <AuthComponent email={email}
-      mode={mode}
-      setMode={setMode}
-      password={password}
-      passwordView={passwordView}
-      passwordIcon={passwordIcon}
-      emailValidation={emailValidation}
-      onEmailChange={onEmailChange}
-      onEyePress={onEyePress}
-      loginClick={loginClick}
-      setPassword={setPassword}
-    />
-  );
+  if (welcome) {
+    return (
+      <AuthComponent email={email}
+        mode={mode}
+        setMode={setMode}
+        password={password}
+        passwordView={passwordView}
+        passwordIcon={passwordIcon}
+        emailValidation={emailValidation}
+        onEmailChange={onEmailChange}
+        onEyePress={onEyePress}
+        loginClick={loginClick}
+        setPassword={setPassword}
+      />
+    );
+  } else {
+    return (
+      <View style={{flex: 1}}>
+        <StatusBar translucent backgroundColor="transparent" />
+        <AppIntroSlider
+          keyExtractor={_keyExtractor}
+          renderItem={_renderItem}
+          data={slides}
+          onDone={onDone}
+        />
+      </View>
+    );
+  }
 };
 Auth.propTypes = {
   navigation: PropTypes.object,
 };
+
+const styles = StyleSheet.create({
+  slide: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  text: {
+    color: '#fff',
+    marginTop: 92,
+    fontSize: 32,
+    textAlign: 'center',
+  },
+  image: {
+    width: 320,
+    height: 320,
+    marginVertical: 32,
+  },
+  title: {
+    fontSize: 22,
+    color: 'white',
+    textAlign: 'center',
+  },
+});
+
+type Item = typeof slides[0];
 
 export default Auth;

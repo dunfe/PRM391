@@ -145,7 +145,6 @@ const ProductListScreen = () => {
             placeholder="Search food"
             style={styles.textInput} />
         </View>
-
       </View>
       <View style={{marginTop: 20, marginRight: 20}}>
         {categoriesList()}

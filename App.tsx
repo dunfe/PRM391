@@ -5,7 +5,6 @@ import 'react-native-gesture-handler';
 import Home from "./src/screen/ScreenHome";
 import {Provider} from 'react-redux';
 import store from "./src/redux/store";
-
 // @TODO: This is to hide a Warning
 //  caused by NativeBase after upgrading to RN 0.62
 import {YellowBox} from 'react-native';

@@ -1,14 +1,16 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator}
   from '@react-navigation/material-bottom-tabs';
 import {View, Text} from 'react-native';
 import ProductList from './ProductList';
-// import {Icon} from 'native-base';
-// import MaterialCommunityIcons from 'react-native-vector-icons'
-import Icon from 'react-native-vector-icons/Feather';
+import {Icon} from 'native-base';
 import CartScreen from '../screen/Cart';
+import User from "./User";
+import TabBarIconHome from "../components/TabBarIcon/TabBarIconHome";
+import TabBarIconMenu from "../components/TabBarIcon/TabBarIconMenu";
+import TabBarIconCart from "../components/TabBarIcon/TabBarIconCart";
+import TabBarIconNotification from "../components/TabBarIcon/TabBarIconNotification";
+import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
 
 const ProductListDis = () => {
   return (
@@ -22,14 +24,6 @@ const Feed = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text>Feed!</Text>
-    </View>
-  );
-};
-
-const Remark = () => {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Remark!</Text>
     </View>
   );
 };
@@ -58,7 +52,6 @@ const MyTabs = () => {
       initialRouteName='ProductListDis'
       activeColor='#FFC529'
       inactiveColor='#D7D7D7'
-      // style={{backgroundColor: '#ffffff'}}>
       barStyle={{backgroundColor: '#ffffff'}}>
       <Tab.Screen
         name="ProductListDis"
@@ -66,13 +59,7 @@ const MyTabs = () => {
         options={{
           tabBarLabel: 'Home',
           tabBarColor: '#ffffff',
-          // eslint-disable-next-line react/display-name
-          tabBarIcon: ({color}) => (
-            // <Feather name='home'/>
-            <Icon name='home'
-              style={{fontSize: 20, color: color}}/>
-            // <MaterialCommunityIcons name="home" size={26} />
-          ),
+          tabBarIcon: TabBarIconHome,
         }}
       />
       <Tab.Screen
@@ -81,11 +68,7 @@ const MyTabs = () => {
         options={{
           tabBarLabel: 'Menu',
           tabBarColor: '#ffffff',
-          // eslint-disable-next-line react/display-name
-          tabBarIcon: ({color}) => (
-            <Icon name='book-open'
-              style={{fontSize: 20, color: color}}/>
-          ),
+          tabBarIcon: TabBarIconMenu,
         }}
       />
       <Tab.Screen
@@ -94,24 +77,7 @@ const MyTabs = () => {
         options={{
           tabBarLabel: 'Cart',
           tabBarColor: '#ffffff',
-          // eslint-disable-next-line react/display-name
-          tabBarIcon: ({color}) => (
-            <Icon name='shopping-bag'
-              style={{fontSize: 20, color: color}}/>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Remark"
-        component={Remark}
-        options={{
-          tabBarLabel: 'Remark',
-          tabBarColor: '#ffffff',
-          // eslint-disable-next-line react/display-name
-          tabBarIcon: ({color}) => (
-            <Icon name='bookmark'
-              style={{fontSize: 20, color: color}}/>
-          ),
+          tabBarIcon: TabBarIconCart,
         }}
       />
       <Tab.Screen
@@ -120,23 +86,26 @@ const MyTabs = () => {
         options={{
           tabBarLabel: 'Notification',
           tabBarColor: '#ffffff',
-          // eslint-disable-next-line react/display-name
-          tabBarIcon: ({color}) => (
-            <Icon name='bell'
-              style={{fontSize: 20, color: color}}/>
-          ),
+          tabBarIcon: TabBarIconNotification,
+        }}
+      />
+      <Tab.Screen
+        name="User"
+        component={User}
+        options={{
+          tabBarLabel: 'User',
+          tabBarColor: '#ffffff',
+          tabBarIcon: TabBarIconUser,
         }}
       />
     </Tab.Navigator>
   );
 };
 
-const App = () => {
+const ScreenHome = () => {
   return (
-    <NavigationContainer independent={true}>
-      <MyTabs />
-    </NavigationContainer>
+    <MyTabs />
   );
 };
 
-export default App;
+export default ScreenHome;
