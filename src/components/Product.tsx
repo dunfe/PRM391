@@ -1,48 +1,63 @@
-/* eslint-disable require-jsdoc */
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
-import { View, Image, Text, StyleSheet } from 'react-native';
+import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 interface IProps {
-  imgUri: string;
-  productName: string;
-  description: string;
-  calories: number;
-  price: number;
+    product: {
+        productId: number;
+        productName: string;
+        shortDescription: string;
+        detail: string;
+        calories: number;
+        price: number;
+        productImage: string;
+        timeToMake: number;
+        categoryId: number;
+    }
 }
 
 const product = (props: IProps) => {
+  const navigation = useNavigation();
+  const detailClick = () => {
+    navigation.navigate('Detail', {
+      product: props.product,
+    });
+  };
   return (
-    <View style={styles.product}>
-      <Image style={styles.productImage}
-        source={{ uri: props.imgUri }} />
-      <Text numberOfLines={1} style={{ marginTop: 10, fontSize: 19, fontWeight: 'bold' }}>
-        {props.productName}
-      </Text>
-      <Text numberOfLines={1} style={{ marginTop: 5, fontSize: 15, color: '#c9c9c9' }}>
-        {props.description}
-      </Text>
-      <View style={{ marginTop: 5, flex: 1, flexDirection: 'row' }}>
-        <Image
-          style={styles.fireImgage}
-          source={require('../images/fire.png')}
-        />
-        <Text style={styles.calories}>{props.calories} Calories</Text>
+    <TouchableOpacity onPress={detailClick}>
+      <View style={styles.product}>
+        <Image style={styles.productImage}
+          source={{uri: props.product.productImage}} />
+        <Text numberOfLines={1}
+          style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
+          {props.product.productName}
+        </Text>
+        <Text numberOfLines={1}
+          style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
+          {props.product.shortDescription}
+        </Text>
+        <View style={{marginTop: 5, flex: 1, flexDirection: 'row'}}>
+          <Image
+            style={styles.fireImgage}
+            source={require('../images/fire.png')}
+          />
+          <Text style={styles.calories}>{props.product.calories} Calories</Text>
+        </View>
+        <View
+          style={{
+            marginBottom: 15,
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Image
+            style={styles.coinImg}
+            source={require('../images/money.png')}
+          />
+          <Text style={styles.price}>{props.product.price}</Text>
+        </View>
       </View>
-      <View
-        style={{
-          marginBottom: 15,
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <Image
-          style={styles.coinImg}
-          source={require('../images/money.png')}
-        />
-        <Text style={styles.price}>{props.price}</Text>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -52,7 +67,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 5
+    marginTop: 5,
   },
   coinImg: {
     height: 20,
@@ -71,19 +86,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     height: 150,
     width: 150,
-    borderRadius: 400
+    borderRadius: 400,
   },
   product: {
     backgroundColor: 'white',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 4,
-    // },
-    // shadowOpacity: 0.3,
-    // shadowRadius: 4.65,
-
-    // elevation: 20,
     alignItems: 'center',
     marginLeft: 20,
     height: 300,
@@ -91,6 +97,6 @@ const styles = StyleSheet.create({
     borderColor: '#D7D7D7',
     borderWidth: 1.5,
     borderRadius: 30,
-    padding: 5
+    padding: 5,
   },
 });

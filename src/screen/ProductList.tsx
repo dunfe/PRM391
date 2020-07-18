@@ -41,16 +41,13 @@ interface Product {
 const ProductListScreen = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState(0);
   const user = useSelector((state: Login) => state.login);
 
   const displayArray = products.map((item) => (
     <View key={item.productId}>
       <Product
-        productName={item.productName}
-        description={item.shortDescription}
-        price={item.price}
-        calories={item.calories}
-        imgUri={item.productImage}
+        product={item}
       />
     </View>
   ));
@@ -59,6 +56,9 @@ const ProductListScreen = () => {
     const thisCategoriesList = categories.map((item) => {
       return (
         <Category
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory}
+          categoryId={item.categoryId}
           key={item.categoryId}
           imgUri={item.categoryImage}
           name={item.categoryName}
@@ -84,24 +84,41 @@ const ProductListScreen = () => {
             });
       };
       const getProducts = () => {
-        fetch(host + '/api/v1/products', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'bearer ' + user.jwtToken,
-          },
-        })
-            .then((response) => response.json())
-            .then(async (data) => {
-              await setProducts(data);
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
+        if (selectedCategory === 0) {
+          fetch(host + '/api/v1/products', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'bearer ' + user.jwtToken,
+            },
+          })
+              .then((response) => response.json())
+              .then(async (data) => {
+                await setProducts(data);
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+        } else {
+          fetch(host + '/api/v1/categories/' + selectedCategory + '/products', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'bearer ' + user.jwtToken,
+            },
+          })
+              .then((response) => response.json())
+              .then(async (data) => {
+                await setProducts(data);
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+        }
       };
       getCategories();
       getProducts();
-    }, []);
+    }, [selectedCategory]);
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {thisCategoriesList}

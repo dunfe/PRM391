@@ -7,19 +7,24 @@ import {
   Text,
   StyleSheet,
   TouchableHighlight,
-  Alert,
 } from 'react-native';
 
 interface IProps {
   imgUri: string;
+  selectedCategory: number;
   name: string;
+  categoryId: number;
+  setSelectedCategory: (event: any) => void;
 }
 
 // eslint-disable-next-line max-len
 const Category = (props: IProps) => {
   const clickHandler = () => {
-    // function to handle click on floating Action Button
-    Alert.alert('Floating Button Clicked');
+    if (props.selectedCategory === props.categoryId) {
+      props.setSelectedCategory(0);
+    } else {
+      props.setSelectedCategory(props.categoryId);
+    }
   };
   const thisImage =
       props.imgUri ?
@@ -28,7 +33,9 @@ const Category = (props: IProps) => {
   return (
     <TouchableHighlight
       onPress={clickHandler} underlayColor='#F2F2F2'>
-      <View style={styles.categoryStyle}>
+      <View style={props.selectedCategory === props.categoryId ?
+          styles.selectedCategoryStyle :
+          styles.categoryStyle}>
         <View style={styles.ViewImage}>
           <Image source={{uri: thisImage}}
             style={styles.ImageCategoryStyle} />
@@ -40,8 +47,6 @@ const Category = (props: IProps) => {
     </TouchableHighlight>
   );
 };
-
-export default Category;
 
 const styles = StyleSheet.create({
   categoryStyle: {
@@ -55,6 +60,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     backgroundColor: '#FFFFFF',
+  },
+  selectedCategoryStyle: {
+    marginLeft: 20,
+    borderWidth: 1,
+    borderColor: '#FFC529',
+    // width: null,
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    backgroundColor: '#FFC529',
   },
   ViewImage: {
     flex: 1,
@@ -72,3 +89,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+export default Category;

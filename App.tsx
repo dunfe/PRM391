@@ -9,6 +9,7 @@ import store from "./src/redux/store";
 //  caused by NativeBase after upgrading to RN 0.62
 import {YellowBox} from 'react-native';
 import Auth from "./src/screen/Auth";
+import Detail from "./src/screen/Detail";
 // import TabBar from './src/components/TopTabbar';
 
 YellowBox.ignoreWarnings([
@@ -23,7 +24,8 @@ const App: React.FC = () => {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
           <Stack.Screen name="Auth" component={Auth}/>
-          <Stack.Screen name="List" component={Home}/>
+          <Stack.Screen name="Home" component={Home}/>
+          <Stack.Screen name="Detail" component={Detail}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

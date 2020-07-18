@@ -144,7 +144,7 @@ const Auth = ({navigation, ...props}: IProps) => {
   useEffect(() => {
     const checkLogin = () => {
       if (user.jwtToken !== "") {
-        navigation.navigate("List");
+        navigation.navigate("Home");
       }
     };
     checkLogin();
