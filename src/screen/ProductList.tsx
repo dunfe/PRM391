@@ -13,6 +13,7 @@ import Product from '../components/Product';
 import {Icon} from 'native-base';
 import {host} from "../constants/host";
 import {useSelector} from "react-redux";
+import {useNavigation} from '@react-navigation/native';
 
 interface Login {
   login: {
@@ -42,8 +43,9 @@ const ProductListScreen = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(0);
+  const [searchText, setSearchText] = useState('');
   const user = useSelector((state: Login) => state.login);
-
+  const navigation = useNavigation();
   const displayArray = products.map((item) => (
     <View key={item.productId}>
       <Product
@@ -51,6 +53,60 @@ const ProductListScreen = () => {
       />
     </View>
   ));
+
+  useEffect(() => {
+    const getCategories = () => {
+      fetch(host + '/api/v1/categories', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setCategories(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    };
+    const getProducts = () => {
+      if (selectedCategory === 0) {
+        fetch(host + '/api/v1/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => response.json())
+            .then(async (data) => {
+              await setProducts(data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+      } else {
+        fetch(host + '/api/v1/categories/' + selectedCategory + '/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => response.json())
+            .then(async (data) => {
+              await setProducts(data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+      }
+    };
+    getCategories();
+    getProducts();
+  }, [selectedCategory]);
 
   const categoriesList = () => {
     const thisCategoriesList = categories.map((item) => {
@@ -65,65 +121,17 @@ const ProductListScreen = () => {
         />
       );
     });
-
-    useEffect(() => {
-      const getCategories = () => {
-        fetch(host + '/api/v1/categories', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'bearer ' + user.jwtToken,
-          },
-        })
-            .then((response) => response.json())
-            .then(async (data) => {
-              await setCategories(data);
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
-      };
-      const getProducts = () => {
-        if (selectedCategory === 0) {
-          fetch(host + '/api/v1/products', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'bearer ' + user.jwtToken,
-            },
-          })
-              .then((response) => response.json())
-              .then(async (data) => {
-                await setProducts(data);
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-        } else {
-          fetch(host + '/api/v1/categories/' + selectedCategory + '/products', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'bearer ' + user.jwtToken,
-            },
-          })
-              .then((response) => response.json())
-              .then(async (data) => {
-                await setProducts(data);
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-        }
-      };
-      getCategories();
-      getProducts();
-    }, [selectedCategory]);
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {thisCategoriesList}
       </ScrollView>
     );
+  };
+
+  const onSearch = () => {
+    navigation.navigate("Search", {
+      searchTextTemp: searchText,
+    });
   };
   return (
     <ScrollView
@@ -140,6 +148,7 @@ const ProductListScreen = () => {
         <TouchableOpacity style={styles.box2}>
           <Icon
             name="user"
+            onPress={() => navigation.navigate("User")}
             type="Feather"
             style={{fontSize: 20, color: '#FFFFFF'}}
           />
@@ -160,7 +169,9 @@ const ProductListScreen = () => {
           />
           <TextInput
             placeholder="Search food"
-            style={styles.textInput} />
+            onSubmitEditing={onSearch}
+            style={styles.textInput} value={searchText}
+            onChangeText={(value) => setSearchText(value)}/>
         </View>
       </View>
       <View style={{marginTop: 20, marginRight: 20}}>

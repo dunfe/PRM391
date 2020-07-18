@@ -10,6 +10,7 @@ import store from "./src/redux/store";
 import {YellowBox} from 'react-native';
 import Auth from "./src/screen/Auth";
 import Detail from "./src/screen/Detail";
+import Search from "./src/screen/Search";
 // import TabBar from './src/components/TopTabbar';
 
 YellowBox.ignoreWarnings([

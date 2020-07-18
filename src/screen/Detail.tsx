@@ -8,9 +8,12 @@ import {
 } from 'react-native';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconAwesome from 'react-native-vector-icons/FontAwesome5';
+// eslint-disable-next-line no-unused-vars
 import {RouteProp} from '@react-navigation/native';
+// eslint-disable-next-line no-unused-vars
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Dimensions} from 'react-native';
+import {Col, Row, Grid} from 'react-native-easy-grid';
 
 type RootStackParamList = {
     product: {
@@ -38,6 +41,7 @@ interface IProps {
 const windowWidth = Dimensions.get('window').width;
 
 const Detail = ({route, navigation}: IProps) => {
+  // @ts-ignore
   const {product} = route.params;
   const [count, setCount] = useState(0);
   const changeQuality = (action: string) => () => {
@@ -81,13 +85,15 @@ const Detail = ({route, navigation}: IProps) => {
               </TouchableOpacity>
             </View>
             <View style={styles.detailContainer}>
-              <View style={styles.title}>
-                <Text style={styles.foodName}>{product.productName}</Text>
-                <View style={styles.price}>
+              <Grid style={styles.title}>
+                <Col size={75}>
+                  <Text style={styles.foodName}>{product.productName}</Text>
+                </Col>
+                <Col size={25} style={styles.price}>
                   <IconAwesome name="dollar-sign" color="#FE724C" size={20}/>
                   <Text style={styles.foodPrice}>{product.price}</Text>
-                </View>
-              </View>
+                </Col>
+              </Grid>
               <View style={styles.category}>
                 <View style={styles.categoryField}>
                   <IconAwesome name="fire-alt" color="#FE724C" size={20}/>
@@ -202,6 +208,7 @@ const styles = StyleSheet.create({
   },
   price: {
     flexDirection: "row",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   bottomComponent: {

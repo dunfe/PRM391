@@ -11,19 +11,12 @@ import TabBarIconMenu from "../components/TabBarIcon/TabBarIconMenu";
 import TabBarIconCart from "../components/TabBarIcon/TabBarIconCart";
 import TabBarIconNotification from "../components/TabBarIcon/TabBarIconNotification";
 import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
+import Search from "./Search";
 
 const ProductListDis = () => {
   return (
     <View>
       <ProductList />
-    </View>
-  );
-};
-
-const Feed = () => {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Feed!</Text>
     </View>
   );
 };
@@ -63,10 +56,10 @@ const MyTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Menu"
-        component={Feed}
+        name="Search"
+        component={Search}
         options={{
-          tabBarLabel: 'Menu',
+          tabBarLabel: 'Search',
           tabBarColor: '#ffffff',
           tabBarIcon: TabBarIconMenu,
         }}
