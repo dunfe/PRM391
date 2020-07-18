@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import Category from '../components/CategoryList';
 import Product from '../components/Product';
-import {Icon} from 'native-base';
-import {host} from "../constants/host";
-import {useSelector} from "react-redux";
+import { Icon } from 'native-base';
+import { host } from "../constants/host";
+import { useSelector } from "react-redux";
 
 interface Login {
   login: {
@@ -75,13 +75,13 @@ const ProductListScreen = () => {
             'Authorization': 'bearer ' + user.jwtToken,
           },
         })
-            .then((response) => response.json())
-            .then(async (data) => {
-              await setCategories(data);
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setCategories(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
       };
       const getProducts = () => {
         fetch(host + '/api/v1/products', {
@@ -91,13 +91,13 @@ const ProductListScreen = () => {
             'Authorization': 'bearer ' + user.jwtToken,
           },
         })
-            .then((response) => response.json())
-            .then(async (data) => {
-              await setProducts(data);
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setProducts(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
       };
       getCategories();
       getProducts();
@@ -117,14 +117,14 @@ const ProductListScreen = () => {
           <Icon
             name="align-left"
             type="Feather"
-            style={{fontSize: 20, color: '#272D2F'}}
+            style={{ fontSize: 20, color: '#272D2F' }}
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.box2}>
           <Icon
             name="user"
             type="Feather"
-            style={{fontSize: 20, color: '#FFFFFF'}}
+            style={{ fontSize: 20, color: '#FFFFFF' }}
           />
         </TouchableOpacity>
       </View>
@@ -146,10 +146,10 @@ const ProductListScreen = () => {
             style={styles.textInput} />
         </View>
       </View>
-      <View style={{marginTop: 20, marginRight: 20}}>
+      <View style={{ marginTop: 20, marginRight: 20 }}>
         {categoriesList()}
       </View>
-      <View style={{marginTop: 15, marginRight: 20}}>
+      <View style={{ marginTop: 15, marginRight: 20 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           {displayArray}
         </ScrollView>

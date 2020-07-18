@@ -7,8 +7,9 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import {Icon} from 'native-base';
+import { Icon } from 'native-base';
 import TopTab from '../components/TopTabbar';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CartScreen = () => {
   const clickHandler = () => {
@@ -17,35 +18,37 @@ const CartScreen = () => {
   };
 
   return (
-    <ScrollView
-      scrollEnabled={false}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}>
-      <View style={{backgroundColor: 'white'}}>
-        <View style={styles.flexbox}>
-          <TouchableOpacity style={styles.box1} onPress={clickHandler}>
-            <Icon
-              name="chevron-left"
-              type="Feather"
-              style={{fontSize: 25, color: '#272D2F'}}
-            />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.headerText}>Cart Food</Text>
-          </View>
-          <TouchableOpacity onPress={clickHandler} style={styles.box2}>
-            <View>
+    <SafeAreaView>
+      <ScrollView
+        scrollEnabled={false}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}>
+        <View style={{ backgroundColor: 'white' }}>
+          <View style={styles.flexbox}>
+            <TouchableOpacity style={styles.box1} onPress={clickHandler}>
               <Icon
-                name="user"
+                name="chevron-left"
                 type="Feather"
-                style={{fontSize: 20, color: '#FFFFFF'}}
+                style={{ fontSize: 25, color: '#272D2F' }}
               />
+            </TouchableOpacity>
+            <View>
+              <Text style={styles.headerText}>Cart Food</Text>
             </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={clickHandler} style={styles.box2}>
+              <View>
+                <Icon
+                  name="user"
+                  type="Feather"
+                  style={{ fontSize: 20, color: '#FFFFFF' }}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      <TopTab />
-    </ScrollView>
+        <TopTab />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

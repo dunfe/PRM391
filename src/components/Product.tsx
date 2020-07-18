@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
   coinImg: {
     height: 20,
     width: 20,
+    marginRight: 5,
+    marginTop: 10
   },
   calories: {
     fontSize: 15,
@@ -75,15 +77,6 @@ const styles = StyleSheet.create({
   },
   product: {
     backgroundColor: 'white',
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 4,
-    // },
-    // shadowOpacity: 0.3,
-    // shadowRadius: 4.65,
-
-    // elevation: 20,
     alignItems: 'center',
     marginLeft: 20,
     height: 300,
@@ -91,6 +84,7 @@ const styles = StyleSheet.create({
     borderColor: '#D7D7D7',
     borderWidth: 1.5,
     borderRadius: 30,
-    padding: 5
+    padding: 5,
+    marginTop: 10
   },
 });
