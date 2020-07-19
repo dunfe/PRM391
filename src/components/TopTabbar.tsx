@@ -4,7 +4,6 @@ import {Container, Tab, Tabs, Content} from 'native-base';
 import {KeyboardAvoidingView, View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import ProductInCart from '../components/ProductInCart';
-import AddFoodScreen from '../screen/AddFoodScreen';
 import ScreenTracking from '../screen/ScreenTracking';
 
 const arrayProductInCart = [
@@ -49,7 +48,7 @@ const TopTab = () => {
         <Content style={styles.content}>
           <Tabs
             tabBarUnderlineStyle={styles.tabUnderStyle}
-            initialPage={1}
+            initialPage={2}
             locked={false}>
             <Tab
               heading="Add Food"
@@ -57,10 +56,10 @@ const TopTab = () => {
               textStyle={{color: '#272D2F', fontSize: 15}}
               tabStyle={{backgroundColor: 'white'}}
               activeTabStyle={{backgroundColor: 'white'}}>
-              {<AddFoodScreen />}
+              {displayArray}
             </Tab>
             <Tab
-              // key={1}
+              key={1}
               heading="Tracking Order"
               activeTextStyle={{color: '#FFC529', fontWeight: 'bold'}}
               textStyle={{color: '#272D2F', fontSize: 15}}

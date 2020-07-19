@@ -12,8 +12,6 @@ import TabBarIconCart from "../components/TabBarIcon/TabBarIconCart";
 import TabBarIconNotification from "../components/TabBarIcon/TabBarIconNotification";
 import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
 import Search from "./Search";
-import Radio from '../screen/Confirm';
-import { RadioButton } from 'react-native-paper';
 
 const ProductListDis = () => {
   return (
@@ -33,7 +31,9 @@ const Cart = () => {
 
 const Notification = () => {
   return (
-    <Radio />
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>Notification!</Text>
+    </View>
   );
 };
 
