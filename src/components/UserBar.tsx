@@ -1,0 +1,161 @@
+import * as React from 'react';
+// import {View, Text} from 'native-base';
+import {Container, Tab, Tabs, Content, Text} from 'native-base';
+import {KeyboardAvoidingView, View, Image} from 'react-native';
+import {StyleSheet} from 'react-native';
+import FavouriteFood from './FavouriteFood';
+import UserInformation from '../screen/UserInfomation';
+import material from '../../native-base-theme/variables/material';
+import {ScrollView} from 'react-native-gesture-handler';
+
+const favouriteProductArray = [
+  {
+    id: 1,
+    productName: 'Fried Chickenaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    productImage: '../images/fried-chicken.png',
+  },
+  {
+    id: 2,
+    productName: 'Gà Rán',
+    description: 'Gà Không Có Cay',
+    price: '90.80',
+    productImage: '../images/fried-chicken.png',
+  },
+  {
+    id: 3,
+    productName: 'Gà Chiên Giòn Giònnn',
+    description: 'Gà Siêu nhạt lun',
+    price: '9.80',
+    productImage: '../images/fried-chicken.png',
+  },
+  {
+    id: 4,
+    productName: 'Fried Chickenaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    description: 'Spicy fried chicken',
+    price: '9.80',
+    productImage: '../images/fried-chicken.png',
+  },
+  {
+    id: 5,
+    productName: 'Gà Rán',
+    description: 'Gà Không Có Cay',
+    price: '90.80',
+    productImage: '../images/fried-chicken.png',
+  },
+  {
+    id: 6,
+    productName: 'Gà Chiên Giòn Giònnn',
+    description: 'Gà Siêu nhạt lun',
+    price: '9.80',
+    productImage: '../images/fried-chicken.png',
+  },
+];
+
+const displayArray = favouriteProductArray.map((item) => (
+  <View key={item.id} style={{marginTop: 20}}>
+    <FavouriteFood
+      productName={item.productName}
+      description={item.description}
+      price={item.price}
+      productImage={require('../images/fried-chicken.png')}
+    />
+  </View>
+));
+
+interface IProps {
+    userDetail: {
+        userId: string,
+        userName: string,
+        email: string,
+        sex: boolean,
+        address: string,
+        dateOfBirth: string,
+    }
+}
+
+
+const UserBar = (props: IProps) => {
+  return (
+    <Container>
+      <Tabs>
+        <Tab
+          heading="User Information"
+          activeTextStyle={{color: '#FFC529', fontWeight: 'bold'}}
+          textStyle={{color: '#272D2F', fontSize: 15}}
+          tabStyle={{backgroundColor: '#FFC529'}}
+          activeTabStyle={{backgroundColor: 'white'}}>
+          {<UserInformation userDetail={props.userDetail} />}
+        </Tab>
+        <Tab
+          key={1}
+          heading="Favourite"
+          activeTextStyle={{color: '#FFC529', fontWeight: 'bold'}}
+          textStyle={{color: '#272D2F', fontSize: 15}}
+          tabStyle={{backgroundColor: '#FFC529'}}
+          activeTabStyle={{backgroundColor: 'white'}}>
+          <ScrollView>
+            {displayArray}
+          </ScrollView>
+        </Tab>
+      </Tabs>
+    </Container>
+  );
+};
+
+const styles = StyleSheet.create({
+  tabs: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  tabUnderStyle: {
+    borderRadius: 20,
+    backgroundColor: '#FFC529',
+    width: 200,
+  },
+  headerContainer: {
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    backgroundColor: "#FFFAFA",
+    fontFamily: "Roboto",
+    justifyContent: 'center',
+  },
+  returnBtn: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+  },
+  btnLeft: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+  },
+  btnRight: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    marginTop: 4,
+  },
+  myProfile: {
+    marginTop: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  product: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: '#ffffff',
+    marginLeft: 20,
+    marginRight: 20,
+    borderColor: '#D7D7D7',
+  },
+  productImage: {
+    height: 100,
+    width: 100,
+    margin: 15,
+    borderRadius: 8,
+  },
+});
+
+export default UserBar;
