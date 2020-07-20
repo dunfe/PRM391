@@ -1,9 +1,17 @@
 /* eslint-disable require-jsdoc */
 // import React, {Component} from 'react';
 // eslint-disable-next-line no-unused-vars
-import {View, Image, StyleSheet, Text, ImageProps} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  ImageProps,
+  TouchableOpacity,
+} from 'react-native';
 import React, {Component} from 'react';
 import InputSpinner from 'react-native-input-spinner';
+import {Icon} from 'native-base';
 
 export default class ProductInCart extends Component<{
   imgUri: ImageProps;
@@ -20,9 +28,19 @@ export default class ProductInCart extends Component<{
             <Image style={styles.productImage} source={this.props.imgUri} />
           </View>
           <View style={{paddingLeft: 10}}>
-            <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
-              {this.props.productName}
-            </Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
+                {this.props.productName}
+              </Text>
+              <TouchableOpacity>
+                <Icon style={styles.iconStyle} name="trash-2" type="Feather"/>
+              </TouchableOpacity>
+            </View>
             <Text style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
               {this.props.description}
             </Text>
@@ -62,6 +80,11 @@ export default class ProductInCart extends Component<{
 }
 
 const styles = StyleSheet.create({
+  iconStyle: {
+    color: '#FFC529',
+    paddingTop: 10,
+    fontSize: 25,
+  },
   inputSpinner: {
     borderRadius: 20,
     marginLeft: 30,
