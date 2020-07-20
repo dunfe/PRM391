@@ -6,10 +6,11 @@ import React, {Component} from 'react';
 import InputSpinner from 'react-native-input-spinner';
 
 export default class ProductInCart extends Component<{
-  imgUri: ImageProps;
-  productName: String;
-  description: String;
-  price: String;
+  imgUri: string;
+  productName: string;
+  description: string;
+  price: number;
+  quality: number;
 }> {
   // eslint-disable-next-line require-jsdoc
   render() {
@@ -17,7 +18,8 @@ export default class ProductInCart extends Component<{
       <View style={{height: 130}}>
         <View style={styles.product}>
           <View>
-            <Image style={styles.productImage} source={this.props.imgUri} />
+            <Image style={styles.productImage}
+              source={{uri: this.props.imgUri}} />
           </View>
           <View style={{paddingLeft: 10}}>
             <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
@@ -43,6 +45,7 @@ export default class ProductInCart extends Component<{
                   inputStyle={{width: 30}}
                   max={100}
                   min={1}
+                  value={this.props.quality}
                   step={1}
                   width={110}
                   height={37}
