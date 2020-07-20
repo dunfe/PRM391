@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
   Alert,
   TouchableOpacity,
   Image,
@@ -25,6 +24,12 @@ const User = () => {
     // function to handle click on floating Action Button
     Alert.alert('1');
   };
+
+  const updateAVatar = () => {
+    // function to handle click on floating Action Button
+    Alert.alert('Bạn có muốn update hokkk?');
+  };
+
   return (
     <Container>
       <View style={{backgroundColor: 'white'}}>
@@ -52,23 +57,25 @@ const User = () => {
         </View>
         <View style={styles.userDetailContainer}>
           <View>
-            <Image style={styles.userImage}
-              resizeMode={'stretch'}
-              source={require('../images/slider1.jpg')} />
+            <TouchableOpacity onPress={updateAVatar}>
+              <Image style={styles.userImage}
+                source={{uri: 'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}} />
+            </TouchableOpacity>
+
           </View>
           <View style={{paddingLeft: 20}}>
             <Text style={{marginTop: 10, fontSize: 20, fontWeight: 'bold'}}>
-              <Text>{userDetail.userName}</Text>
+              <Text>{userDetail.userName.length > 15 ? userDetail.userName.substring(0, 15) + '...' : userDetail.userName}</Text>
             </Text>
             <Text style={{marginTop: 5, fontSize: 15, color: '#D7D7D7'}}>
-              {userDetail.email}
+              {userDetail.email.length > 30 ? userDetail.email.substring(0, 30) + '...' : userDetail.email}
             </Text>
             <Text style={{marginTop: 5, fontSize: 15, color: '#d7d7d7'}}>
-              User ID: {userDetail.userId}</Text>
+              User ID: {userDetail.userId.length > 30 ? userDetail.userId.substring(0, 30) + '...' : userDetail.userId}</Text>
           </View>
         </View>
       </View>
-      <UserBar userDetail={userDetail}/>
+      <UserBar userDetail={userDetail} />
     </Container>
   );
 };
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     margin: 15,
-    borderRadius: 20,
+    borderRadius: 5,
   },
 });
 

@@ -1,7 +1,9 @@
-import { Container } from 'native-base';
+import {Container} from 'native-base';
 import * as React from 'react';
-import { Alert, TouchableOpacity } from 'react-native';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Image, Text} from 'react-native';
+import IconAwesome from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 interface IProps {
   userDetail: {
@@ -16,12 +18,33 @@ interface IProps {
 
 const UserInfomation = (props: IProps) => {
   return (
-    <View>
-      <View>
-        <Text>{props.userDetail.userName}</Text>
-      </View>
-      <View>
-        <Text>{props.userDetail.userName}</Text>
+    // User Container chứa toàn bộ thông tin của user
+    <View style={styles.userContainer}>
+      <View >
+        {/* thông tin của từng attribute  */}
+        <View style={styles.informationContainer}>
+          <IconAwesome
+            name="transgender"
+            style={{fontSize: 20, color: 'black', paddingRight: 10}}
+          />
+          <Text>{props.userDetail.sex} Male</Text>
+          {/* {userDetail.userName.length > 15 ? userDetail.userName.substring(0, 15) + '...' : userDetail.userName} */}
+        </View>
+        {/* thông tin của từng attribute  */}
+        <View style={styles.informationContainer}>
+          <FontAwesome
+            name="address-card-o"
+            style={{fontSize: 20, color: 'black', paddingRight: 10}}
+          />
+          <Text>{props.userDetail.address}</Text>
+        </View>
+        <View style={styles.informationContainer}>
+          <FontAwesome
+            name="birthday-cake"
+            style={{fontSize: 20, color: 'red', paddingRight: 10}}
+          />
+          <Text>{props.userDetail.dateOfBirth}</Text>
+        </View>
       </View>
     </View>
   );
@@ -29,32 +52,19 @@ const UserInfomation = (props: IProps) => {
 
 
 const styles = StyleSheet.create({
-  TouchableOpacityStyle: {
-    opacity: 0.8,
-    position: 'absolute',
-    width: 50,
-    height: 50,
+  userContainer: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    right: 180,
-    bottom: 150,
-    shadowColor: '#FFC529',
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 10, width: 10 },
   },
-
-  FloatingButtonStyle: {
-    height: 30,
-    width: 30,
-  },
-  ViewFloatingIcon: {
-    width: 60,
-    height: 60,
-    padding: 13.5,
-    backgroundColor: '#FFC529',
-    borderRadius: 50,
-    borderColor: 'white',
-    borderWidth: 2,
+  informationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 20,
+    marginTop: 20,
+    margin: 10,
+    borderRadius: 10,
+    borderColor: '#FFC529',
+    borderWidth: 10,
   },
 });
 

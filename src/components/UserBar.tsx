@@ -2,10 +2,8 @@ import * as React from 'react';
 // import {View, Text} from 'native-base';
 import {Container, Tab, Tabs, Content, Text} from 'native-base';
 import {KeyboardAvoidingView, View, Image} from 'react-native';
-import {StyleSheet} from 'react-native';
 import FavouriteFood from './FavouriteFood';
 import UserInformation from '../screen/UserInfomation';
-import material from '../../native-base-theme/variables/material';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const favouriteProductArray = [
@@ -104,58 +102,5 @@ const UserBar = (props: IProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  tabs: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  tabUnderStyle: {
-    borderRadius: 20,
-    backgroundColor: '#FFC529',
-    width: 200,
-  },
-  headerContainer: {
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    backgroundColor: "#FFFAFA",
-    fontFamily: "Roboto",
-    justifyContent: 'center',
-  },
-  returnBtn: {
-    flexDirection: 'row',
-    justifyContent: "space-between",
-  },
-  btnLeft: {
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: 'white',
-  },
-  btnRight: {
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    marginTop: 4,
-  },
-  myProfile: {
-    marginTop: 5,
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  product: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    backgroundColor: '#ffffff',
-    marginLeft: 20,
-    marginRight: 20,
-    borderColor: '#D7D7D7',
-  },
-  productImage: {
-    height: 100,
-    width: 100,
-    margin: 15,
-    borderRadius: 8,
-  },
-});
 
 export default UserBar;
