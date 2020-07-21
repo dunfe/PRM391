@@ -1,85 +1,56 @@
 import * as React from 'react';
-// import {View, Text} from 'native-base';
-import {Container, Tab, Tabs, Content} from 'native-base';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {Container, Content} from 'native-base';
+import {View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import ProductInCart from '../components/ProductInCart';
-import AddFoodScreen from '../screen/AddFoodScreen';
-import ScreenTracking from '../screen/ScreenTracking';
+import {useSelector} from "react-redux";
+// import {useEffect, useState} from "react";
 
-const arrayProductInCart = [
-  {
-    id: 1,
-    productName: 'Fried Chicken',
-    description: 'Spicy fried chicken',
-    price: '9.80',
-    imgUri: '../images/fried-chicken.png',
-  },
-  {
-    id: 2,
-    productName: 'Fried Chicken',
-    description: 'Spicy fried chicken',
-    price: '9.80',
-    imgUri: '../images/fried-chicken.png',
-  },
-  {
-    id: 3,
-    productName: 'Fried Chicken',
-    description: 'Spicy fried chicken',
-    price: '9.80',
-    imgUri: '../images/fried-chicken.png',
-  },
-];
+interface Product {
+    productId: number;
+    productName: string;
+    shortDescription: string;
+    detail: string;
+    calories: number;
+    price: number;
+    productImage: string;
+    timeToMake: number;
+    categoryId: number;
+}
 
-const displayArray = arrayProductInCart.map((item) => (
-  <View key={item.id} style={{marginTop: 20}}>
-    <ProductInCart
-      productName={item.productName}
-      description={item.description}
-      price={item.price}
-      imgUri={require('../images/fried-chicken.png')}
-    />
-  </View>
-));
+interface cartProduct {
+    product: Product,
+    quality: number,
+}
 
+interface Cart {
+    products: cartProduct[],
+    total: number,
+}
+
+interface CartState {
+    cart: Cart
+}
 const TopTab = () => {
+  const cart = useSelector((state: CartState) => state.cart);
+
+  const displayArray = cart.products.map((item) => (
+    <View key={item.product.productId} style={{marginTop: 20}}>
+      <ProductInCart
+        quality={item.quality}
+        productName={item.product.productName}
+        description={item.product.shortDescription}
+        price={item.product.price}
+        imgUri={item.product.productImage}
+      />
+    </View>
+  ));
   return (
-    <KeyboardAvoidingView behavior="height" style={{flex: 1}}>
-      <Container style={styles.container}>
-        <Content style={styles.content}>
-          <Tabs
-            tabBarUnderlineStyle={styles.tabUnderStyle}
-            initialPage={1}
-            locked={false}>
-            <Tab
-              heading="Add Food"
-              activeTextStyle={{color: '#FFC529', fontWeight: 'bold'}}
-              textStyle={{color: '#272D2F', fontSize: 15}}
-              tabStyle={{backgroundColor: 'white'}}
-              activeTabStyle={{backgroundColor: 'white'}}>
-              {<AddFoodScreen />}
-            </Tab>
-            <Tab
-              // key={1}
-              heading="Tracking Order"
-              activeTextStyle={{color: '#FFC529', fontWeight: 'bold'}}
-              textStyle={{color: '#272D2F', fontSize: 15}}
-              tabStyle={{backgroundColor: 'white'}}
-              activeTabStyle={{backgroundColor: 'white'}}>
-              {<ScreenTracking />}
-            </Tab>
-            <Tab
-              heading="Done Order"
-              activeTextStyle={{color: '#FFC529', fontWeight: 'bold'}}
-              textStyle={{color: '#272D2F', fontSize: 15}}
-              tabStyle={{backgroundColor: 'white'}}
-              activeTabStyle={{backgroundColor: 'white'}}>
-              {displayArray}
-            </Tab>
-          </Tabs>
-        </Content>
-      </Container>
-    </KeyboardAvoidingView>
+    <Container style={styles.container}>
+      <Content style={styles.content}>
+        {displayArray}
+      </Content>
+    </Container>
   );
 };
 

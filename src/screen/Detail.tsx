@@ -13,7 +13,9 @@ import {RouteProp} from '@react-navigation/native';
 // eslint-disable-next-line no-unused-vars
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Dimensions} from 'react-native';
-import {Col, Row, Grid} from 'react-native-easy-grid';
+import {Col, Grid} from 'react-native-easy-grid';
+import {useDispatch} from "react-redux";
+import {addToCart} from "../redux/cart";
 
 type RootStackParamList = {
     product: {
@@ -41,6 +43,7 @@ interface IProps {
 const windowWidth = Dimensions.get('window').width;
 
 const Detail = ({route, navigation}: IProps) => {
+  const dispatch = useDispatch();
   // @ts-ignore
   const {product} = route.params;
   const [count, setCount] = useState(0);
@@ -52,6 +55,14 @@ const Detail = ({route, navigation}: IProps) => {
     } else {
       setCount((count) => count + 1);
     }
+  };
+  const addToCartClick = () => {
+    dispatch(
+        addToCart({
+          product: product,
+          quality: count,
+        }),
+    );
   };
 
   const goBackClick = () => {
@@ -137,7 +148,7 @@ const Detail = ({route, navigation}: IProps) => {
         </TouchableOpacity>
       </View>
       <View style={styles.btnAddView}>
-        <TouchableOpacity style={styles.btnAdd}>
+        <TouchableOpacity style={styles.btnAdd} onPress={addToCartClick}>
           <IconAnt name="plus" color="black" size={15}/>
         </TouchableOpacity>
       </View>

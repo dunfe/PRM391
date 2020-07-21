@@ -6,7 +6,7 @@ import AuthComponent from '../components/AuthComponent';
 import {host} from '../constants/host';
 import {useDispatch, useSelector} from "react-redux";
 import {signIn} from "../redux/login";
-import {Alert, Image, ImageBackground, StatusBar, StyleSheet, Text, View} from "react-native";
+import {Alert, ImageBackground, StatusBar, StyleSheet, Text, View} from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import {slides} from "../constants/sliders";
 import AppIntroSlider from "react-native-app-intro-slider";

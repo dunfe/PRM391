@@ -31,7 +31,7 @@ const CartScreen = () => {
             />
           </TouchableOpacity>
           <View>
-            <Text style={styles.headerText}>Cart Food</Text>
+            <Text style={styles.headerText}>Your Cart</Text>
           </View>
           <TouchableOpacity onPress={clickHandler} style={styles.box2}>
             <View>
