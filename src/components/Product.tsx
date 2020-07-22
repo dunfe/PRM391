@@ -45,7 +45,6 @@ const product = (props: IProps) => {
         </View>
         <View
           style={{
-            marginBottom: 15,
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 5,
   },
   coinImg: {
     height: 20,

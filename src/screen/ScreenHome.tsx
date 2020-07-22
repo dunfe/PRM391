@@ -1,9 +1,7 @@
 import React from 'react';
-import {createMaterialBottomTabNavigator}
-  from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {View, Text} from 'react-native';
 import ProductList from './ProductList';
-import {Icon} from 'native-base';
 import CartScreen from '../screen/Cart';
 import User from "./User";
 import TabBarIconHome from "../components/TabBarIcon/TabBarIconHome";
@@ -12,14 +10,6 @@ import TabBarIconCart from "../components/TabBarIcon/TabBarIconCart";
 import TabBarIconNotification from "../components/TabBarIcon/TabBarIconNotification";
 import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
 import Search from "./Search";
-
-const ProductListDis = () => {
-  return (
-    <View>
-      <ProductList />
-    </View>
-  );
-};
 
 const Cart = () => {
   return (
@@ -37,21 +27,21 @@ const Notification = () => {
   );
 };
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 const MyTabs = () => {
   return (
     <Tab.Navigator
       initialRouteName='ProductListDis'
-      activeColor='#FFC529'
-      inactiveColor='#D7D7D7'
-      barStyle={{backgroundColor: '#ffffff'}}>
+      tabBarOptions={{
+        activeTintColor: '#FFC529',
+        inactiveTintColor: 'gray',
+      }}>
       <Tab.Screen
         name="ProductListDis"
-        component={ProductListDis}
+        component={ProductList}
         options={{
           tabBarLabel: 'Home',
-          tabBarColor: '#ffffff',
           tabBarIcon: TabBarIconHome,
         }}
       />
@@ -60,7 +50,6 @@ const MyTabs = () => {
         component={Search}
         options={{
           tabBarLabel: 'Search',
-          tabBarColor: '#ffffff',
           tabBarIcon: TabBarIconMenu,
         }}
       />
@@ -69,7 +58,6 @@ const MyTabs = () => {
         component={Cart}
         options={{
           tabBarLabel: 'Cart',
-          tabBarColor: '#ffffff',
           tabBarIcon: TabBarIconCart,
         }}
       />
@@ -78,7 +66,6 @@ const MyTabs = () => {
         component={Notification}
         options={{
           tabBarLabel: 'Notification',
-          tabBarColor: '#ffffff',
           tabBarIcon: TabBarIconNotification,
         }}
       />
@@ -87,7 +74,6 @@ const MyTabs = () => {
         component={User}
         options={{
           tabBarLabel: 'User',
-          tabBarColor: '#ffffff',
           tabBarIcon: TabBarIconUser,
         }}
       />

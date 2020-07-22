@@ -6,8 +6,6 @@ import {
   Text,
   TouchableOpacity, ImageBackground,
 } from 'react-native';
-import IconAnt from 'react-native-vector-icons/AntDesign';
-import IconAwesome from 'react-native-vector-icons/FontAwesome5';
 // eslint-disable-next-line no-unused-vars
 import {RouteProp} from '@react-navigation/native';
 // eslint-disable-next-line no-unused-vars
@@ -16,6 +14,7 @@ import {Dimensions} from 'react-native';
 import {Col, Grid} from 'react-native-easy-grid';
 import {useDispatch} from "react-redux";
 import {addToCart} from "../redux/cart";
+import {Icon} from 'native-base';
 
 type RootStackParamList = {
     product: {
@@ -82,7 +81,8 @@ const Detail = ({route, navigation}: IProps) => {
                 style={styles.btnMinus}
                 onPress={changeQuality("decrease")}>
                 <Text>
-                  <IconAnt name="minus" color="black" size={15}/>
+                  <Icon type="Feather"
+                    name="minus" style={{fontSize: 15}}/>
                 </Text>
               </TouchableOpacity>
               <Text style={styles.btnText}>
@@ -91,7 +91,9 @@ const Detail = ({route, navigation}: IProps) => {
               <TouchableOpacity style={styles.btnPlus}
                 onPress={changeQuality("increase")}>
                 <Text>
-                  <IconAnt name="plus" color="black" size={15}/>
+                  <Icon type="Feather"
+                    name="plus"
+                    color="black" style={{fontSize: 15}}/>
                 </Text>
               </TouchableOpacity>
             </View>
@@ -101,19 +103,25 @@ const Detail = ({route, navigation}: IProps) => {
                   <Text style={styles.foodName}>{product.productName}</Text>
                 </Col>
                 <Col size={25} style={styles.price}>
-                  <IconAwesome name="dollar-sign" color="#FE724C" size={20}/>
+                  <Icon type="Feather"
+                    name="dollar-sign"
+                    style={{fontSize: 15, color: "#FE724C"}}/>
                   <Text style={styles.foodPrice}>{product.price}</Text>
                 </Col>
               </Grid>
               <View style={styles.category}>
                 <View style={styles.categoryField}>
-                  <IconAwesome name="fire-alt" color="#FE724C" size={20}/>
+                  <Icon type="FontAwesome5"
+                    name="fire-alt"
+                    style={{fontSize: 20, color: "#FE724C"}}/>
                   <Text style={styles.categoryText}>
                     {product.calories} Calories
                   </Text>
                 </View>
                 <View style={styles.categoryField}>
-                  <IconAwesome name="clock" color="black" size={20}/>
+                  <Icon type="Feather"
+                    name="clock"
+                    style={{fontSize: 20}}/>
                   <Text style={styles.categoryText}>
                     {product.timeToMake} Min
                   </Text>
@@ -132,24 +140,25 @@ const Detail = ({route, navigation}: IProps) => {
       </ScrollView>
       <View style={styles.btnLeftPosition}>
         <TouchableOpacity onPress={goBackClick}>
-          <IconAnt
-            name="left"
-            color={'black'}
-            size={20}
+          <Icon
+            type="Feather"
+            name="arrow-left"
             style={styles.btnLeft}/>
         </TouchableOpacity>
       </View>
       <View style={styles.btnRightPosition}>
         <TouchableOpacity >
-          <IconAnt
+          <Icon
+            type="Feather"
             name="heart"
-            color="#FE724C"
-            style={styles.btnRight} size={20}/>
+            style={styles.btnRight}/>
         </TouchableOpacity>
       </View>
       <View style={styles.btnAddView}>
         <TouchableOpacity style={styles.btnAdd} onPress={addToCartClick}>
-          <IconAnt name="plus" color="black" size={15}/>
+          <Icon type="Feather"
+            name="plus"
+            style={{fontSize: 15}}/>
         </TouchableOpacity>
       </View>
     </View>
@@ -176,6 +185,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   btnLeft: {
+    fontSize: 20,
     padding: 8,
     borderRadius: 5,
     backgroundColor: 'white',
@@ -184,8 +194,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 30,
     right: 10,
+    color: "#FE724C",
   },
   btnRight: {
+    fontSize: 20,
     right: 10,
     marginTop: 8,
   },

@@ -1,15 +1,14 @@
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View, Dimensions, Image} from 'react-native';
+import {FlatList, StyleSheet, Text, View, Dimensions,
+} from 'react-native';
 import {
   TouchableOpacity,
 } from 'react-native';
-import IconAnt from 'react-native-vector-icons/AntDesign';
-import IconAwesome from 'react-native-vector-icons/FontAwesome5';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Container, Icon, Input, Item} from 'native-base';
 import {useEffect, useState} from "react";
 import {host} from "../constants/host";
 import {useSelector} from "react-redux";
+import ProductInSearch from "../components/ProductInSearch";
 
 interface IProps {
     productId: number;
@@ -52,6 +51,7 @@ const Search = ({route, navigation}) => {
 
   const {searchTextTemp} = route.params ? route.params : '';
   const [searchText, setSearchText] = useState(searchTextTemp);
+  const [count, setCount] = useState(0);
   const user = useSelector((state: Login) => state.login);
   const [array, setArray] = useState([]);
 
@@ -68,7 +68,8 @@ const Search = ({route, navigation}) => {
         })
             .then((response) => response.json())
             .then(async (data) => {
-              await setArray(data);
+              await setArray(data.foods);
+              await setCount(data.count);
             })
             .catch((error) => {
               console.error('Error:', error);
@@ -82,17 +83,18 @@ const Search = ({route, navigation}) => {
       <View style={styles.returnBtn}>
         <TouchableOpacity onPress={goBackClick}>
           <View>
-            <IconAnt name="left"
+            <Icon name="arrow-left"
+              type="Feather"
               color={'black'}
-              size={20} style={styles.btnLeft}/>
+              style={styles.btnLeft}/>
           </View>
         </TouchableOpacity>
         <View>
           <Text style={styles.searchTitle}>Search Food</Text>
         </View>
         <TouchableOpacity>
-          <IconAnt name="user"
-            color="#FE724C" size={20}/>
+          <Icon type="Feather" name="user"
+            color="#FE724C" style={{fontSize: 20}}/>
         </TouchableOpacity>
       </View>
       <View style={{marginTop: 30, marginHorizontal: 20}}>
@@ -110,37 +112,13 @@ const Search = ({route, navigation}) => {
       </View>
       <View style={styles.bottomContainer}>
         <View>
-          <Text style={styles.resultFood}> Found 80 results</Text>
+          <Text style={styles.resultFood}> Found {count} results</Text>
           <FlatList data={array}
             key={columnCount}
             numColumns={2}
             keyExtractor = { (item, index) => index.toString() }
-            renderItem={({item, index} : {item: IProps, index: number}) => (
-              <TouchableOpacity>
-                <View key={`${index}`} style={styles.foodContainer}>
-                  <Image source={{uri: item.productImage}}
-                    resizeMode={'contain'}
-                    style={styles.image}/>
-                  <View>
-                    <View style={styles.category}>
-                      <View style={styles.categoryField}>
-                        <Text style={styles.titleFood}>{item.productName}</Text>
-                      </View>
-                      <View style={styles.categoryField}>
-                        <IconAwesome name="fire-alt" color="#FE724C" size={20}/>
-                        <Text style={styles.caloriesFood}>
-                          {item.shortDescription}
-                        </Text>
-                      </View>
-                      <View style={styles.categoryField}>
-                        <MaterialIcons style={styles.moneyIcon}
-                          name="attach-money" color="#FFC529" size={22}/>
-                        <Text style={styles.foodPrice}>{item.price}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
+            renderItem={({item} : {item: IProps, index: number}) => (
+              <ProductInSearch product={item}/>
             )}/>
         </View>
       </View>
@@ -156,6 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnLeft: {
+    fontSize: 20,
     backgroundColor: 'white',
   },
   returnBtn: {
@@ -239,6 +218,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   moneyIcon: {
+    fontSize: 20,
     marginTop: 5,
   },
 });
