@@ -10,36 +10,28 @@ import {
   Icon,
   StyleProvider,
 } from 'native-base';
-import getTheme from '../../native-base-theme/components';
-import customVariables from '../../native-base-theme/variables/platform';
 import {useEffect} from 'react';
+import getTheme from "../../native-base-theme/components";
+import customVariables from "../../native-base-theme/variables/platform";
 
 interface IProps {
-  email: string,
-  password: string,
-  passwordView: boolean,
-  passwordIcon: string,
-  emailValidation: boolean,
-  onEmailChange: (value: string) => void;
-  onEyePress: () => void;
-  loginClick: () => void;
-  setPassword: (value: string) => void;
-  mode: string;
-  setMode: (value: string) => void;
+    email: string,
+    password: string,
+    passwordView: boolean,
+    passwordIcon: string,
+    emailValidation: boolean,
+    onEmailChange: (value: string) => void;
+    onEyePress: () => void;
+    loginClick: () => void;
+    setPassword: (value: string) => void;
+    mode: string;
 }
 
 const LoginRegister = (props: IProps) => {
-  useEffect(() => {
-    if (props.mode === 'login') {
-      props.setMode('login');
-    } else {
-      props.setMode('register');
-    }
-    console.log(props.mode);
-  }, [props.mode]);
   return (
     <StyleProvider style={getTheme(customVariables)}>
-      <View style={styles.container}>
+
+      <View>
         <Form>
           <Item floatingLabel>
             <Label>Email Address</Label>
@@ -47,7 +39,8 @@ const LoginRegister = (props: IProps) => {
               onChangeText={(value) => props.onEmailChange(value)}/>
             {props.emailValidation ? <Icon name='checkmark'
               style={{color: '#FFC529'}}/> : props.email ? <Icon name='close'
-                style={{color: '#FE724C'}}/> : <Icon/>}
+                style={{color: '#FE724C'}}/> :
+                            <Icon/>}
           </Item>
           <Item floatingLabel>
             <Label>Password</Label>
@@ -56,14 +49,14 @@ const LoginRegister = (props: IProps) => {
               onChangeText={(value) => props.setPassword(value)}/>
             {props.password ? <Icon name={props.passwordIcon}
               style={{color: '#FFC529'}}
-              onPress={props.onEyePress} /> : <Icon/>}
+              onPress={props.onEyePress}/> : <Icon/>}
           </Item>
         </Form>
         <Button primary rounded block
           onPress={() => props.loginClick()}
           style={styles.button}>
           <Text style={styles.text}>
-            {props.mode === 'login' ? 'Login': 'Register'}
+            {props.mode === 'login' ? 'Login' : 'Register'}
           </Text>
         </Button>
       </View>
@@ -72,12 +65,6 @@ const LoginRegister = (props: IProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 2,
-    justifyContent: 'flex-end',
-    position: 'relative',
-    backgroundColor: 'transparent',
-  },
   text: {
     color: 'white',
   },

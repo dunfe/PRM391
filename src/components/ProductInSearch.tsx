@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import IconAwesome from "react-native-vector-icons/FontAwesome5";
+import {Item} from "native-base";
 
 interface IProps {
     product: {
@@ -16,7 +18,7 @@ interface IProps {
     }
 }
 
-const product = (props: IProps) => {
+const ProductInSearch = (props: IProps) => {
   const navigation = useNavigation();
   const detailClick = () => {
     navigation.navigate('Detail', {
@@ -28,46 +30,45 @@ const product = (props: IProps) => {
       <View style={styles.product}>
         <Image style={styles.productImage}
           source={{uri: props.product.productImage}} />
-        <Text numberOfLines={1}
-          style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
-          {props.product.productName}
-        </Text>
-        <Text numberOfLines={1}
-          style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
-          {props.product.shortDescription}
-        </Text>
-        <View style={{marginTop: 5, flex: 1, flexDirection: 'row'}}>
+        <View style={{padding: 5, alignItems: 'center'}}>
+          <Text numberOfLines={1}
+            style={{fontSize: 19, fontWeight: 'bold'}}>
+            {props.product.productName}
+          </Text>
+          <Text numberOfLines={2}
+            style={{fontSize: 15, color: '#c9c9c9', textAlign: 'center'}}>
+            {props.product.shortDescription}
+          </Text>
+        </View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
           <Image
             style={styles.fireImgage}
             source={require('../images/fire.png')}
           />
           <Text style={styles.calories}>{props.product.calories} Calories</Text>
         </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Image
-            style={styles.coinImg}
-            source={require('../images/money.png')}
-          />
+        <Item>
+          <IconAwesome name="dollar-sign"
+            color="#FFC529" size={20}/>
           <Text style={styles.price}>{props.product.price}</Text>
-        </View>
+        </Item>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default product;
+export default ProductInSearch;
 
 const styles = StyleSheet.create({
   price: {
     fontSize: 30,
     fontWeight: 'bold',
+    paddingLeft: 5,
   },
   coinImg: {
+    position: "absolute",
+    left: -20,
+    top: 12,
     height: 20,
     width: 20,
   },
@@ -81,20 +82,17 @@ const styles = StyleSheet.create({
     width: 20,
   },
   productImage: {
-    marginTop: 10,
     height: 150,
-    width: 150,
-    borderRadius: 400,
+    width: "100%",
+    borderRadius: 30,
   },
   product: {
     backgroundColor: 'white',
     alignItems: 'center',
-    marginLeft: 20,
+    marginLeft: 5,
+    marginBottom: 10,
     height: 300,
-    width: 200,
-    borderColor: '#D7D7D7',
-    borderWidth: 1.5,
+    width: 180,
     borderRadius: 30,
-    padding: 5,
   },
 });

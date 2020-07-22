@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,31 +6,157 @@ import {
   TextInput,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import Category from '../components/CategoryList';
 import Product from '../components/Product';
 import {Icon} from 'native-base';
+import {host} from "../constants/host";
+import {useSelector} from "react-redux";
+import {useNavigation} from '@react-navigation/native';
+
+interface Login {
+  login: {
+    jwtToken: string,
+  }
+}
+
+interface Category {
+  categoryId: number,
+  categoryName: string,
+  categoryImage: string,
+}
+interface Product {
+  productId: number,
+  productName: string,
+  shortDescription: string,
+  detail: string,
+  calories: number,
+  price: number,
+  productImage: string,
+  timeToMake: number,
+  categoryId: number,
+
+}
 
 const ProductListScreen = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [searchText, setSearchText] = useState('');
+  const user = useSelector((state: Login) => state.login);
+  const navigation = useNavigation();
+  const displayArray = products.map((item) => (
+    <View key={item.productId}>
+      <Product
+        product={item}
+      />
+    </View>
+  ));
+
+  useEffect(() => {
+    const getCategories = () => {
+      fetch(host + '/api/v1/categories', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setCategories(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    };
+    const getProducts = () => {
+      if (selectedCategory === 0) {
+        fetch(host + '/api/v1/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => response.json())
+            .then(async (data) => {
+              await setProducts(data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+      } else {
+        fetch(host + '/api/v1/categories/' + selectedCategory + '/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => response.json())
+            .then(async (data) => {
+              await setProducts(data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+      }
+    };
+    getCategories();
+    getProducts();
+  }, [selectedCategory]);
+
+  const categoriesList = () => {
+    const thisCategoriesList = categories.map((item) => {
+      return (
+        <Category
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory}
+          categoryId={item.categoryId}
+          key={item.categoryId}
+          imgUri={item.categoryImage}
+          name={item.categoryName}
+        />
+      );
+    });
+    return (
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {thisCategoriesList}
+      </ScrollView>
+    );
+  };
+
+  const onSearch = () => {
+    navigation.navigate("Search", {
+      searchTextTemp: searchText,
+    });
+  };
   return (
-    // Try setting `justifyContent` to `center`.
-    // Try setting `flexDirection` to `row`.
-    <View>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
       <View style={styles.flexbox}>
-        <View
-          style={styles.box1}>
-          <Icon name='align-left' type='Feather'
-            style={{fontSize: 20, color: '#272D2F'}}/>
-        </View>
-        <View
-          style={styles.box2}>
-          <Icon name='user' type='Feather'
-            style={{fontSize: 20, color: '#FFFFFF'}}/>
-        </View>
+        <TouchableOpacity style={styles.box1}>
+          <Icon
+            name="align-left"
+            type="Feather"
+            style={{fontSize: 20, color: '#272D2F'}}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.box2}>
+          <Icon
+            name="user"
+            onPress={() => navigation.navigate("User")}
+            type="Feather"
+            style={{fontSize: 20, color: '#FFFFFF'}}
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
-          marginTop: 80,
+          marginTop: 35,
         }}>
         <Text style={styles.topText}>Lets eat</Text>
         <Text style={styles.topText}>Quality food 😋</Text>
@@ -43,54 +169,20 @@ const ProductListScreen = () => {
           />
           <TextInput
             placeholder="Search food"
-            style={styles.textInput}></TextInput>
-        </View>
-        <View style={styles.searchOption}>
-          <Icon name='sliders' type='Feather'
-            style={{fontSize: 20, color: '#272D2F'}}/>
+            onSubmitEditing={onSearch}
+            style={styles.textInput} value={searchText}
+            onChangeText={(value) => setSearchText(value)}/>
         </View>
       </View>
-      <View style={{marginTop: 50}}></View>
       <View style={{marginTop: 20, marginRight: 20}}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Category
-            imgUri={require('../images/fast-food.png')}
-            name="Fast food"
-          />
-          <Category imgUri={require('../images/bread.png')} name="Bread" />
-          <Category
-            imgUri={require('../images/vegetable.png')}
-            name="Vegetable"
-          />
-          <Category imgUri={require('../images/fruit.png')} name="Fruit" />
-        </ScrollView>
+        {categoriesList()}
       </View>
       <View style={{marginTop: 15, marginRight: 20}}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <Product
-            productName="Fried Chicken"
-            description="Spicy fried chicken"
-            price="9.80"
-            calories="78"
-            imgUri={require('../images/fried-chicken.png')}
-          />
-          <Product
-            productName="Hot dog"
-            description="Spicy hot dog"
-            price="7.0"
-            calories="69"
-            imgUri={require('../images/hotdog.png')}
-          />
-          <Product
-            productName="Pizza"
-            description="Sea food pizza"
-            price="10.0"
-            calories="100"
-            imgUri={require('../images/pizza.png')}
-          />
+          {displayArray}
         </ScrollView>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -116,11 +208,11 @@ const styles = StyleSheet.create({
     height: 55,
     width: 250,
     borderRadius: 15,
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#e3e3e3',
   },
   searchOption: {
-    marginRight: 40,
-    borderRadius: 15,
+    marginRight: 0,
+    borderRadius: 0,
     width: 55,
     height: 55,
     backgroundColor: '#FFC529',
@@ -146,7 +238,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     paddingLeft: 20,
     fontWeight: 'bold',
-    fontFamily: 'Montserrat',
   },
   container: {
     flex: 1,
@@ -156,11 +247,13 @@ const styles = StyleSheet.create({
   },
 
   SectionStyle: {
-    width: 275,
+    width: '95%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#e3e3e3',
+    // borderWidth: 1,
+    // borderColor: 'red',
     height: 55,
     borderRadius: 15,
   },

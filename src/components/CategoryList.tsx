@@ -1,26 +1,52 @@
 /* eslint-disable require-jsdoc */
-import React, {Component} from 'react';
+import React from 'react';
 // eslint-disable-next-line no-unused-vars
-import {View, Image, Text, StyleSheet, ImageProps} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableHighlight,
+} from 'react-native';
+
+interface IProps {
+  imgUri: string;
+  selectedCategory: number;
+  name: string;
+  categoryId: number;
+  setSelectedCategory: (event: any) => void;
+}
 
 // eslint-disable-next-line max-len
-export default class Category extends Component<{
-  imgUri: ImageProps;
-  name: String;
-}> {
-  render() {
-    return (
-      <View style={styles.categoryStyle}>
+const Category = (props: IProps) => {
+  const clickHandler = () => {
+    if (props.selectedCategory === props.categoryId) {
+      props.setSelectedCategory(0);
+    } else {
+      props.setSelectedCategory(props.categoryId);
+    }
+  };
+  const thisImage =
+      props.imgUri ?
+          props.imgUri :
+          '../images/pizza.png';
+  return (
+    <TouchableHighlight
+      onPress={clickHandler} underlayColor='#F2F2F2'>
+      <View style={props.selectedCategory === props.categoryId ?
+          styles.selectedCategoryStyle :
+          styles.categoryStyle}>
         <View style={styles.ViewImage}>
-          <Image source={this.props.imgUri} style={styles.ImageCategoryStyle} />
+          <Image source={{uri: thisImage}}
+            style={styles.ImageCategoryStyle} />
         </View>
         <View style={styles.TextCategory}>
-          <Text>{this.props.name}</Text>
+          <Text>{props.name}</Text>
         </View>
       </View>
-    );
-  }
-}
+    </TouchableHighlight>
+  );
+};
 
 const styles = StyleSheet.create({
   categoryStyle: {
@@ -34,6 +60,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     backgroundColor: '#FFFFFF',
+  },
+  selectedCategoryStyle: {
+    marginLeft: 20,
+    borderWidth: 1,
+    borderColor: '#FFC529',
+    // width: null,
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    backgroundColor: '#FFC529',
   },
   ViewImage: {
     flex: 1,
@@ -51,3 +89,5 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+export default Category;

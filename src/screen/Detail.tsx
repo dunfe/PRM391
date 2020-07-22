@@ -1,210 +1,251 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, { Component } from 'react';
+import React, {useState} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
-  StatusBar,
-  Button,
-  Image,
-  ImageBackground,
-  TouchableOpacity
-
+  TouchableOpacity, ImageBackground,
 } from 'react-native';
+// eslint-disable-next-line no-unused-vars
+import {RouteProp} from '@react-navigation/native';
+// eslint-disable-next-line no-unused-vars
+import {StackNavigationProp} from '@react-navigation/stack';
+import {Dimensions} from 'react-native';
+import {Col, Grid} from 'react-native-easy-grid';
+import {useDispatch} from "react-redux";
+import {addToCart} from "../redux/cart";
+import {Icon} from 'native-base';
 
-import IconAnt from 'react-native-vector-icons/AntDesign';
-import IconAwesome from 'react-native-vector-icons/FontAwesome5';
+type RootStackParamList = {
+    product: {
+        productId: number;
+        productName: string;
+        shortDescription: string;
+        detail: string;
+        calories: number;
+        price: number;
+        productImage: string;
+        timeToMake: number;
+        categoryId: number;
+    }
+};
 
-const Welcome = () => {
+type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'product'>;
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList,
+    'product'>;
 
-    return (
-
-      <ScrollView style={styles.container}>
-      <View>
-        <View style={styles.returnBtn}>
-          <TouchableOpacity >
-            <View>
-              <IconAnt name="left" color={'black'} size={20} style={styles.btnLeft} />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <IconAnt name="heart" color="#FE724C" style={styles.btnRight} size={20} />
-          </TouchableOpacity>
-        </View>
-
-        <View>
-          <Image source={require('./image/dimsum.jpg')} style={styles.image}>
-
-          </Image>
-
-        </View>
-
-      </View>
-
-      <View style={[styles.bottomFlex]}>
-
-
-
-        <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btnMinus}>
-            <Text >
-              <IconAnt name="minus" color="black" size={15} />
-            </Text>
-          </TouchableOpacity>
-
-          <Text style={styles.btnText}>
-            1
-            </Text>
-
-          <TouchableOpacity style={styles.btnPlus}>
-            <Text>
-              <IconAnt name="plus" color="black" size={15} />
-            </Text>
-          </TouchableOpacity>
-
-        </View>
-
-
-
-        <View style={styles.bottomComponent}>
-
-          <View style={styles.title}>
-            <Text style={styles.foodName}> Title</Text>
-            <Text style={styles.foodPrice}> Price</Text>
-          </View>
-
-          <View style={styles.category}>
-            <View style={styles.categoryField}>
-              <IconAnt name="star" color="#FFC529" size={20} />
-              <Text style={styles.categoryText}> Price</Text>
-            </View>
-            <View style={styles.categoryField}>
-              <IconAwesome name="fire-alt" color="#FE724C" size={20} />
-              <Text style={styles.categoryText}> Price</Text>
-            </View>
-            <View style={styles.categoryField}>
-              <IconAwesome name="clock" color="black" size={20} />
-              <Text style={styles.categoryText}> Price</Text>
-            </View>
-
-          </View>
-
-          <View style={styles.detailInfor} >
-
-            <Text style={styles.detail}>Details</Text>
-
-            <Text style={styles.detailInformation}>Whatever its form may be upon being cooked, its flavour may change but its flesh remains high in protein, low in fat and can be digested easily.
-            </Text>
-
-          </View>
-
-        </View>
-
-        <View style={styles.btnContainer}>
-         
-         <TouchableOpacity style={styles.btnAdd}>
-           <Text>
-             <IconAnt name="plus" color="black" size={15} />
-           </Text>
-         </TouchableOpacity>
-
-       </View>
-
-
-
-      </View>
-
-
-    </ScrollView>
-
-
-    );
-
-
+interface IProps {
+    route: ProfileScreenRouteProp;
+    navigation: ProfileScreenNavigationProp;
 }
 
+const windowWidth = Dimensions.get('window').width;
+
+const Detail = ({route, navigation}: IProps) => {
+  const dispatch = useDispatch();
+  // @ts-ignore
+  const {product} = route.params;
+  const [count, setCount] = useState(0);
+  const changeQuality = (action: string) => () => {
+    if (action === 'decrease') {
+      if (count > 0) {
+        setCount((count) => count - 1);
+      }
+    } else {
+      setCount((count) => count + 1);
+    }
+  };
+  const addToCartClick = () => {
+    dispatch(
+        addToCart({
+          product: product,
+          quality: count,
+        }),
+    );
+  };
+
+  const goBackClick = () => {
+    navigation.goBack();
+  };
+  return (
+    <View style={{flex: 1}}>
+      <ScrollView style={styles.container}>
+        <ImageBackground
+          imageStyle={styles.imageStyle}
+          source={{uri: product.productImage}}
+          style={styles.image}/>
+        <View style={styles.bottomFlex}>
+          <View style={styles.bottomComponent}>
+            <View style={styles.btnContainer}>
+              <TouchableOpacity
+                style={styles.btnMinus}
+                onPress={changeQuality("decrease")}>
+                <Text>
+                  <Icon type="Feather"
+                    name="minus" style={{fontSize: 15}}/>
+                </Text>
+              </TouchableOpacity>
+              <Text style={styles.btnText}>
+                {count}
+              </Text>
+              <TouchableOpacity style={styles.btnPlus}
+                onPress={changeQuality("increase")}>
+                <Text>
+                  <Icon type="Feather"
+                    name="plus"
+                    color="black" style={{fontSize: 15}}/>
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.detailContainer}>
+              <Grid style={styles.title}>
+                <Col size={75}>
+                  <Text style={styles.foodName}>{product.productName}</Text>
+                </Col>
+                <Col size={25} style={styles.price}>
+                  <Icon type="Feather"
+                    name="dollar-sign"
+                    style={{fontSize: 15, color: "#FE724C"}}/>
+                  <Text style={styles.foodPrice}>{product.price}</Text>
+                </Col>
+              </Grid>
+              <View style={styles.category}>
+                <View style={styles.categoryField}>
+                  <Icon type="FontAwesome5"
+                    name="fire-alt"
+                    style={{fontSize: 20, color: "#FE724C"}}/>
+                  <Text style={styles.categoryText}>
+                    {product.calories} Calories
+                  </Text>
+                </View>
+                <View style={styles.categoryField}>
+                  <Icon type="Feather"
+                    name="clock"
+                    style={{fontSize: 20}}/>
+                  <Text style={styles.categoryText}>
+                    {product.timeToMake} Min
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.detailInfor}>
+                <Text style={styles.detail}>Details</Text>
+                <Text style={styles.detailInformation}>
+                  {product.detail}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={{paddingBottom: 70}}><Text> </Text></View>
+      </ScrollView>
+      <View style={styles.btnLeftPosition}>
+        <TouchableOpacity onPress={goBackClick}>
+          <Icon
+            type="Feather"
+            name="arrow-left"
+            style={styles.btnLeft}/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.btnRightPosition}>
+        <TouchableOpacity >
+          <Icon
+            type="Feather"
+            name="heart"
+            style={styles.btnRight}/>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.btnAddView}>
+        <TouchableOpacity style={styles.btnAdd} onPress={addToCartClick}>
+          <Icon type="Feather"
+            name="plus"
+            style={{fontSize: 15}}/>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-
-
   container: {
-    marginTop: 10,
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    backgroundColor: "#FFFAFA",
-    fontFamily: "Roboto",
+    backgroundColor: "#f7f7f7",
+    position: 'relative',
   },
-
+  imageStyle: {
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
   image: {
-    marginTop: 20,
-    width: 350,
-    height: 300
+    bottom: -20,
+    width: '100%',
+    height: 400,
   },
-
+  btnLeftPosition: {
+    position: "absolute",
+    top: 30,
+    left: 10,
+  },
   btnLeft: {
+    fontSize: 20,
     padding: 8,
     borderRadius: 5,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+  },
+  btnRightPosition: {
+    position: "absolute",
+    top: 30,
+    right: 10,
+    color: "#FE724C",
   },
   btnRight: {
+    fontSize: 20,
+    right: 10,
     marginTop: 8,
   },
-
-
   btnPlus: {
     backgroundColor: '#FFC529',
     justifyContent: 'center',
     padding: 10,
-    paddingRight:20,
+    paddingRight: 20,
     borderBottomRightRadius: 20,
     borderTopRightRadius: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
-
   btnMinus: {
     backgroundColor: '#FFC529',
     alignContent: 'center',
     justifyContent: 'center',
     padding: 10,
-    paddingLeft:20,
+    paddingLeft: 20,
+    right: -1,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
-
   btnText: {
     backgroundColor: '#FFC529',
-    width: 30,
-    alignContent: 'center',
+    width: 50,
+    textAlign: 'center',
     padding: 7,
-    fontSize: 20,
-    fontWeight: "bold"
+    fontSize: 18,
+    fontWeight: "bold",
   },
-
-
+  price: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
   bottomComponent: {
     borderRadius: 20,
-    margin:5,
-
+    backgroundColor: 'white',
+    position: 'relative',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
   },
-
   returnBtn: {
     flexDirection: 'row',
     justifyContent: "space-between",
   },
-
-
   title: {
     flexDirection: 'row',
     justifyContent: "space-between",
@@ -212,78 +253,80 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
   },
-
   foodName: {
     fontSize: 20,
     fontWeight: "bold",
-    color:'black',
+    color: 'black',
+    marginLeft: 5,
   },
-
   foodPrice: {
     fontSize: 20,
     fontWeight: "bold",
-    marginRight:10,
-    color:'black',
+    marginRight: 10,
+    color: 'black',
   },
-
-
   detail: {
     fontSize: 20,
     fontWeight: "bold",
-    color:'black',
+    color: 'black',
+    marginLeft: 5,
   },
-
   btnContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: -20,
+  },
+  addBtnContainer: {
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'center',
-
   },
-
   bottomFlex: {
+    marginHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'column',
-    backgroundColor: 'white',
-    height: 500,
-    marginTop: 30,
-
   },
   category: {
     marginTop: 15,
     flexDirection: 'row',
     justifyContent: "space-between",
     alignItems: "center",
+    marginLeft: 5,
   },
-
   categoryField: {
     padding: 8,
     paddingRight: 20,
-    marginRight: 15,
     borderRadius: 10,
     flexDirection: 'row',
-    backgroundColor: "#FFFAFA",
   },
-
   detailInfor: {
     marginTop: 25,
-
   },
-
   categoryText: {
     marginLeft: 5,
   },
-
-  detailInformation:{
-    marginTop:10,
-    color:'#D7D7D7',
-    fontWeight:"bold",
-  },  
+  detailInformation: {
+    marginTop: 10,
+    color: '#D7D7D7',
+    fontWeight: "bold",
+  },
+  btnAddView: {
+    position: "absolute",
+    bottom: 20,
+    left: (windowWidth / 2) - (45 / 2),
+    width: 45,
+  },
   btnAdd: {
-    padding: 15,
+    borderWidth: 5, borderColor: "white",
     borderRadius: 30,
+    width: 55,
+    padding: 15,
     backgroundColor: '#FFC529',
-    
+  },
+  detailContainer: {
+    marginTop: 20,
   },
 });
 
-
-export default Welcome;
+export default Detail;
