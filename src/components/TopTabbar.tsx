@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import ProductInCart from '../components/ProductInCart';
 import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+// import {useEffect, useState} from "react";
 
 interface Product {
     productId: number;
