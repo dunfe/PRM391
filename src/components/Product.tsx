@@ -20,7 +20,7 @@ const product = (props: IProps) => {
   const navigation = useNavigation();
   const detailClick = () => {
     navigation.navigate('Detail', {
-      product: props.product,
+      productId: props.product.productId,
     });
   };
   return (
@@ -45,7 +45,6 @@ const product = (props: IProps) => {
         </View>
         <View
           style={{
-            marginBottom: 15,
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 5,
   },
   coinImg: {
     height: 20,
@@ -95,7 +93,6 @@ const styles = StyleSheet.create({
     height: 300,
     width: 200,
     borderColor: '#D7D7D7',
-    borderWidth: 1.5,
     borderRadius: 30,
     padding: 5,
   },

@@ -4,7 +4,6 @@ import {
   Button,
   Form,
   Item,
-
   Input,
   Text,
   Label,
@@ -26,18 +25,9 @@ interface IProps {
     loginClick: () => void;
     setPassword: (value: string) => void;
     mode: string;
-    setMode: (value: string) => void;
 }
 
 const LoginRegister = (props: IProps) => {
-  useEffect(() => {
-    if (props.mode === 'login') {
-      props.setMode('login');
-    } else {
-      props.setMode('register');
-    }
-    console.log(props.mode);
-  }, [props.mode]);
   return (
     <StyleProvider style={getTheme(customVariables)}>
 

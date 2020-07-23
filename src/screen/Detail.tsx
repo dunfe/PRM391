@@ -1,21 +1,25 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   ScrollView,
   View,
   Text,
-  TouchableOpacity, ImageBackground,
+  TouchableOpacity, ImageBackground, SafeAreaView,
 } from 'react-native';
-import IconAnt from 'react-native-vector-icons/AntDesign';
-import IconAwesome from 'react-native-vector-icons/FontAwesome5';
 // eslint-disable-next-line no-unused-vars
 import {RouteProp} from '@react-navigation/native';
 // eslint-disable-next-line no-unused-vars
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Dimensions} from 'react-native';
 import {Col, Grid} from 'react-native-easy-grid';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addToCart} from "../redux/cart";
+import {Icon, Spinner} from 'native-base';
+import {host} from "../constants/host";
+// eslint-disable-next-line no-unused-vars
+import {Login} from "./Auth";
+// eslint-disable-next-line no-unused-vars
+import {Product} from "../containers/cartInterface";
 
 type RootStackParamList = {
     product: {
@@ -42,10 +46,24 @@ interface IProps {
 
 const windowWidth = Dimensions.get('window').width;
 
+const initProduct: Product = {
+  productId: 1,
+  productName: "string",
+  shortDescription: "string",
+  detail: "string",
+  calories: 0,
+  price: 0,
+  productImage: "",
+  timeToMake: 0,
+  categoryId: 0,
+};
+
 const Detail = ({route, navigation}: IProps) => {
   const dispatch = useDispatch();
   // @ts-ignore
-  const {product} = route.params;
+  const {productId} = route.params;
+  const user = useSelector((state: Login) => state.login);
+  const [product, setProduct] = useState<Product>(initProduct);
   const [count, setCount] = useState(0);
   const changeQuality = (action: string) => () => {
     if (action === 'decrease') {
@@ -56,7 +74,9 @@ const Detail = ({route, navigation}: IProps) => {
       setCount((count) => count + 1);
     }
   };
+
   const addToCartClick = () => {
+    console.log(count);
     dispatch(
         addToCart({
           product: product,
@@ -68,13 +88,46 @@ const Detail = ({route, navigation}: IProps) => {
   const goBackClick = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    const getProduct = () => {
+      fetch(host + '/api/v1/products/' + productId, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setProduct(data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    };
+    getProduct();
+  }, []);
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{backgroundColor: "#f7f7f7"}}>
       <ScrollView style={styles.container}>
-        <ImageBackground
+        {product.productImage !== "" ? <ImageBackground
           imageStyle={styles.imageStyle}
           source={{uri: product.productImage}}
-          style={styles.image}/>
+          style={styles.image}/> : <Spinner/>}
+        <TouchableOpacity onPress={goBackClick}
+          style={styles.btnLeftPosition}>
+          <Icon
+            type="Feather"
+            name="arrow-left"
+            style={styles.btnLeft}/>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnRightPosition} >
+          <Icon
+            type="Feather"
+            name="heart"
+            style={styles.btnRight}/>
+        </TouchableOpacity>
         <View style={styles.bottomFlex}>
           <View style={styles.bottomComponent}>
             <View style={styles.btnContainer}>
@@ -82,7 +135,8 @@ const Detail = ({route, navigation}: IProps) => {
                 style={styles.btnMinus}
                 onPress={changeQuality("decrease")}>
                 <Text>
-                  <IconAnt name="minus" color="black" size={15}/>
+                  <Icon type="Feather"
+                    name="minus" style={{fontSize: 15}}/>
                 </Text>
               </TouchableOpacity>
               <Text style={styles.btnText}>
@@ -91,7 +145,9 @@ const Detail = ({route, navigation}: IProps) => {
               <TouchableOpacity style={styles.btnPlus}
                 onPress={changeQuality("increase")}>
                 <Text>
-                  <IconAnt name="plus" color="black" size={15}/>
+                  <Icon type="Feather"
+                    name="plus"
+                    color="black" style={{fontSize: 15}}/>
                 </Text>
               </TouchableOpacity>
             </View>
@@ -101,19 +157,25 @@ const Detail = ({route, navigation}: IProps) => {
                   <Text style={styles.foodName}>{product.productName}</Text>
                 </Col>
                 <Col size={25} style={styles.price}>
-                  <IconAwesome name="dollar-sign" color="#FE724C" size={20}/>
+                  <Icon type="Feather"
+                    name="dollar-sign"
+                    style={{fontSize: 15, color: "#FE724C"}}/>
                   <Text style={styles.foodPrice}>{product.price}</Text>
                 </Col>
               </Grid>
               <View style={styles.category}>
                 <View style={styles.categoryField}>
-                  <IconAwesome name="fire-alt" color="#FE724C" size={20}/>
+                  <Icon type="FontAwesome5"
+                    name="fire-alt"
+                    style={{fontSize: 20, color: "#FE724C"}}/>
                   <Text style={styles.categoryText}>
                     {product.calories} Calories
                   </Text>
                 </View>
                 <View style={styles.categoryField}>
-                  <IconAwesome name="clock" color="black" size={20}/>
+                  <Icon type="Feather"
+                    name="clock"
+                    style={{fontSize: 20}}/>
                   <Text style={styles.categoryText}>
                     {product.timeToMake} Min
                   </Text>
@@ -130,29 +192,14 @@ const Detail = ({route, navigation}: IProps) => {
         </View>
         <View style={{paddingBottom: 70}}><Text> </Text></View>
       </ScrollView>
-      <View style={styles.btnLeftPosition}>
-        <TouchableOpacity onPress={goBackClick}>
-          <IconAnt
-            name="left"
-            color={'black'}
-            size={20}
-            style={styles.btnLeft}/>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.btnRightPosition}>
-        <TouchableOpacity >
-          <IconAnt
-            name="heart"
-            color="#FE724C"
-            style={styles.btnRight} size={20}/>
-        </TouchableOpacity>
-      </View>
       <View style={styles.btnAddView}>
         <TouchableOpacity style={styles.btnAdd} onPress={addToCartClick}>
-          <IconAnt name="plus" color="black" size={15}/>
+          <Icon type="Feather"
+            name="plus"
+            style={{fontSize: 15}}/>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -166,28 +213,44 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   image: {
-    bottom: -20,
+    top: 0,
     width: '100%',
     height: 400,
   },
   btnLeftPosition: {
     position: "absolute",
-    top: 30,
+    top: 20,
     left: 10,
+    borderColor: '#272D2F',
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btnLeft: {
+    fontSize: 20,
     padding: 8,
     borderRadius: 5,
     backgroundColor: 'white',
   },
   btnRightPosition: {
     position: "absolute",
-    top: 30,
+    top: 20,
     right: 10,
+    color: "#FE724C",
+    borderColor: '#272D2F',
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFC529',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btnRight: {
-    right: 10,
-    marginTop: 8,
+    fontSize: 20,
+    color: "white",
   },
   btnPlus: {
     backgroundColor: '#FFC529',
@@ -228,6 +291,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
     justifyContent: 'center',
+    top: -20,
     padding: 10,
   },
   returnBtn: {

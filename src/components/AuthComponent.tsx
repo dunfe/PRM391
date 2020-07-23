@@ -25,6 +25,11 @@ interface IProps {
 }
 
 const AuthComponent = (props: IProps) => {
+  const onTabChange = (value: any) => {
+    if (value.i === 1) {
+      props.setMode("register");
+    } else props.setMode("login");
+  };
   return (
     <KeyboardAvoidingView style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding': 'height'}>
@@ -37,7 +42,8 @@ const AuthComponent = (props: IProps) => {
               source={require('../images/login_img_2-01.jpg')}/>
           </Row>
           <Row size={50}>
-            <Tabs tabBarUnderlineStyle={styles.tabUnderStyle}>
+            <Tabs tabBarUnderlineStyle={styles.tabUnderStyle}
+              onChangeTab={onTabChange}>
               <Tab heading="Login"
                 activeTextStyle={{color: '#272D2F', fontWeight: 'bold'}}
                 textStyle={{color: '#272D2F', fontSize: 12}}
@@ -52,7 +58,6 @@ const AuthComponent = (props: IProps) => {
                   onEyePress={props.onEyePress}
                   loginClick={props.loginClick}
                   mode='login'
-                  setMode={() => props.setMode('login')}
                   setPassword={props.setPassword}/>
               </Tab>
               <Tab heading="Register"
@@ -69,7 +74,6 @@ const AuthComponent = (props: IProps) => {
                   onEyePress={props.onEyePress}
                   loginClick={props.loginClick}
                   mode='register'
-                  setMode={() => props.setMode('register')}
                   setPassword={props.setPassword}/>
               </Tab>
             </Tabs>

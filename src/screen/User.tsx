@@ -61,17 +61,19 @@ const User = () => {
               <Image style={styles.userImage}
                 source={{uri: 'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}} />
             </TouchableOpacity>
-
           </View>
           <View style={{paddingLeft: 20}}>
             <Text style={{marginTop: 10, fontSize: 20, fontWeight: 'bold'}}>
-              <Text>{userDetail.userName.length > 15 ? userDetail.userName.substring(0, 15) + '...' : userDetail.userName}</Text>
+              <Text>{userDetail.userName.length > 15 ?
+                  userDetail.userName.substring(0, 15) + '...' : userDetail.userName}</Text>
             </Text>
             <Text style={{marginTop: 5, fontSize: 15, color: '#D7D7D7'}}>
-              {userDetail.email.length > 30 ? userDetail.email.substring(0, 30) + '...' : userDetail.email}
+              {userDetail.email.length > 30 ?
+                  userDetail.email.substring(0, 30) + '...' : userDetail.email}
             </Text>
             <Text style={{marginTop: 5, fontSize: 15, color: '#d7d7d7'}}>
-              User ID: {userDetail.userId.length > 30 ? userDetail.userId.substring(0, 30) + '...' : userDetail.userId}</Text>
+              User ID: {userDetail.userId.length > 30 ?
+                userDetail.userId.substring(0, 30) + '...' : userDetail.userId}</Text>
           </View>
         </View>
       </View>

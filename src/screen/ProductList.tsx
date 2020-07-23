@@ -238,7 +238,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     paddingLeft: 20,
     fontWeight: 'bold',
-    fontFamily: 'Montserrat',
   },
   container: {
     flex: 1,
