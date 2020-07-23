@@ -4,7 +4,7 @@ import ProductInCart from '../components/ProductInCart';
 import {useSelector} from "react-redux";
 import {Icon} from "native-base";
 import {View} from "native-base";
-import {StyleSheet, Text, TouchableOpacity} from "react-native";
+import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity} from "react-native";
 import {useDispatch} from "react-redux";
 import {removeFromCart, totalCalculator} from "../redux/cart";
 import {useEffect} from "react";
@@ -74,17 +74,26 @@ const Cart = () => {
       <Text style={styles.headerText}>Your Cart</Text>
       <TouchableOpacity style={styles.box2}>
         <Icon
-          name="user"
+          name="shopping-bag"
           type="Feather"
           style={{fontSize: 20, color: '#FFFFFF'}}
         />
       </TouchableOpacity>
     </View>
   );
+
+  const empty = () => {
+    return (
+      <View style={{width: "100%", alignItems: "center"}}>
+        <Text>Empty</Text>
+      </View>
+    );
+  };
   return (
     <SwipeListView
       data={cart.products}
       ListHeaderComponent={header}
+      ListEmptyComponent={empty}
       keyExtractor={(item: cartProduct) => item.product.productId + ""}
       renderItem={ (data) => (
         <ProductInCart

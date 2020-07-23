@@ -47,7 +47,7 @@ const ProductInCart = (props: IProps) => {
 
   return (
     <TouchableOpacity onPress={detailClick}
-      style={{height: 130, paddingTop: 10}}>
+      style={{height: 130, marginBottom: 10}}>
       <View style={styles.product}>
         <Image style={styles.productImage}
           resizeMode={"cover"}
@@ -79,6 +79,7 @@ const ProductInCart = (props: IProps) => {
               source={require('../images/money.png')}
             />
             <Text style={styles.price}>{props.product.price}</Text>
+            {props.quality > 0 ?
             <View style={styles.inputSpinner}>
               <InputSpinner
                 inputStyle={{width: 30}}
@@ -94,7 +95,8 @@ const ProductInCart = (props: IProps) => {
                 buttonFontSize={15}
                 color={'#FFC529'}
               />
-            </View>
+            </View> :
+                <Text/>}
           </View>
         </View>
       </View>

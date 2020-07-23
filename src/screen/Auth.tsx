@@ -21,6 +21,7 @@ interface IProps {
 export interface Login {
   login: {
     jwtToken: string,
+    email: string,
   }
 }
 
@@ -56,9 +57,10 @@ const Auth = ({navigation, ...props}: IProps) => {
     console.log(mode);
   }, [mode]);
 
-  const storeToken = async (token: string) => {
+  const storeToken = async (token: string, email: string) => {
     try {
       await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('email', email);
     } catch (e) {
       console.log('Something wrong', e);
     }
@@ -67,10 +69,13 @@ const Auth = ({navigation, ...props}: IProps) => {
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
+      const emailStorage = await AsyncStorage.getItem('email');
+
       if (token !== null) {
         dispatch(
             signIn({
               jwtToken: token,
+              email: emailStorage,
             }),
         );
       }
@@ -98,9 +103,10 @@ const Auth = ({navigation, ...props}: IProps) => {
             dispatch(
                 signIn({
                   jwtToken: json.jwtToken,
+                  email: email,
                 }),
             );
-            await storeToken(json.jwtToken);
+            await storeToken(json.jwtToken, email);
           } else {
             Alert.alert("Register successful, please login!");
             navigation.navigate("Auth");

@@ -8,6 +8,7 @@ export interface Product {
     productImage: string;
     timeToMake: number;
     categoryId: number;
+    isFavourite: boolean;
 }
 
 export interface cartProduct {

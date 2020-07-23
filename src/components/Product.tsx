@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import SpinnerView from "./SpinnerView";
 
 interface IProps {
     product: {
@@ -26,8 +27,8 @@ const product = (props: IProps) => {
   return (
     <TouchableOpacity onPress={detailClick}>
       <View style={styles.product}>
-        <Image style={styles.productImage}
-          source={{uri: props.product.productImage}} />
+        {props.product.productImage !== "" ? <Image style={styles.productImage}
+          source={{uri: props.product.productImage}} /> : <SpinnerView/>}
         <Text numberOfLines={1}
           style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
           {props.product.productName}

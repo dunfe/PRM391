@@ -14,12 +14,13 @@ import {Dimensions} from 'react-native';
 import {Col, Grid} from 'react-native-easy-grid';
 import {useDispatch, useSelector} from "react-redux";
 import {addToCart} from "../redux/cart";
-import {Icon, Spinner} from 'native-base';
+import {Icon} from 'native-base';
 import {host} from "../constants/host";
 // eslint-disable-next-line no-unused-vars
 import {Login} from "./Auth";
 // eslint-disable-next-line no-unused-vars
 import {Product} from "../containers/cartInterface";
+import SpinnerView from "../components/SpinnerView";
 
 type RootStackParamList = {
     product: {
@@ -32,6 +33,7 @@ type RootStackParamList = {
         productImage: string;
         timeToMake: number;
         categoryId: number;
+        isFavourite: boolean;
     }
 };
 
@@ -56,6 +58,7 @@ const initProduct: Product = {
   productImage: "",
   timeToMake: 0,
   categoryId: 0,
+  isFavourite: false,
 };
 
 const Detail = ({route, navigation}: IProps) => {
@@ -63,6 +66,7 @@ const Detail = ({route, navigation}: IProps) => {
   // @ts-ignore
   const {productId} = route.params;
   const user = useSelector((state: Login) => state.login);
+  const [favouriteChange, setFavouriteChange] = useState(false);
   const [product, setProduct] = useState<Product>(initProduct);
   const [count, setCount] = useState(0);
   const changeQuality = (action: string) => () => {
@@ -91,7 +95,7 @@ const Detail = ({route, navigation}: IProps) => {
 
   useEffect(() => {
     const getProduct = () => {
-      fetch(host + '/api/v1/products/' + productId, {
+      fetch(host + '/api/v1/products/' + user.email + "/" + productId, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -107,14 +111,54 @@ const Detail = ({route, navigation}: IProps) => {
           });
     };
     getProduct();
-  }, []);
+  }, [favouriteChange]);
+
+  const onHeart = () => {
+    const setFavourite = () => {
+      if (product.isFavourite) {
+        fetch(host + '/api/v1/favourites/' + user.email + "/" +
+                    product.productId, {
+          method: 'DELETE',
+          headers: {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+        })
+            .then((response) => {
+              if (response.status === 200) {
+                setFavouriteChange(!favouriteChange);
+              }
+            });
+      } else {
+        fetch(host + '/api/v1/favourites', {
+          method: 'POST',
+          headers: {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + user.jwtToken,
+          },
+          body: JSON.stringify({
+            productId: product.productId,
+            email: user.email,
+          }),
+        }).then((response) => {
+          if (response.status === 200) {
+            setFavouriteChange(!favouriteChange);
+          }
+        });
+      }
+    };
+    setFavourite();
+  };
+
   return (
     <SafeAreaView style={{backgroundColor: "#f7f7f7"}}>
       <ScrollView style={styles.container}>
         {product.productImage !== "" ? <ImageBackground
           imageStyle={styles.imageStyle}
           source={{uri: product.productImage}}
-          style={styles.image}/> : <Spinner/>}
+          style={styles.image}/> : <SpinnerView/>}
         <TouchableOpacity onPress={goBackClick}
           style={styles.btnLeftPosition}>
           <Icon
@@ -122,9 +166,12 @@ const Detail = ({route, navigation}: IProps) => {
             name="arrow-left"
             style={styles.btnLeft}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnRightPosition} >
+        <TouchableOpacity onPress={onHeart}
+          style={product.isFavourite ?
+                                      styles.btnRightPositionYellow :
+                                      styles.btnRightPosition}>
           <Icon
-            type="Feather"
+            type="FontAwesome5"
             name="heart"
             style={styles.btnRight}/>
         </TouchableOpacity>
@@ -212,6 +259,14 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
+  spinnerView: {
+    top: 0,
+    width: '100%',
+    height: 400,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+  },
   image: {
     top: 0,
     width: '100%',
@@ -220,7 +275,7 @@ const styles = StyleSheet.create({
   btnLeftPosition: {
     position: "absolute",
     top: 20,
-    left: 10,
+    left: 20,
     borderColor: '#272D2F',
     borderRadius: 10,
     width: 50,
@@ -235,16 +290,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'white',
   },
-  btnRightPosition: {
+  btnRightPositionYellow: {
     position: "absolute",
     top: 20,
-    right: 10,
+    right: 20,
     color: "#FE724C",
     borderColor: '#272D2F',
     borderRadius: 10,
     width: 50,
     height: 50,
     backgroundColor: '#FFC529',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnRightPosition: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    color: "#FE724C",
+    borderColor: '#272D2F',
+    borderRadius: 10,
+    width: 50,
+    height: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },

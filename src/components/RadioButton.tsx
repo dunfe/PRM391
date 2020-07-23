@@ -1,16 +1,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-import React, {useState} from 'react';
+import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 
 
 interface IProps {
   cards: any;
+  value: string,
+  setValue: (event: any) => void;
 }
 const RadioButton = (props: IProps) => {
-  const [value, setValue] = useState('');
-
   return (
     <View>
       {props.cards.map(
@@ -31,8 +31,8 @@ const RadioButton = (props: IProps) => {
                 </View>
                 <TouchableOpacity
                   style={styles.radioCircle}
-                  onPress={() => setValue(res.key)}>
-                  {value === res.key && <View style={styles.selectedRb} />}
+                  onPress={() => props.setValue(res.key)}>
+                  {props.value === res.key && <View style={styles.selectedRb} />}
                 </TouchableOpacity>
               </View>
             );

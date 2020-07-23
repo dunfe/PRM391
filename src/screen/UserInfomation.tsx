@@ -3,44 +3,43 @@ import {Icon} from 'native-base';
 import {StyleSheet, View, Text} from 'react-native';
 
 interface IProps {
-  userDetail: {
-    userId: string,
-    userName: string,
-    email: string,
-    sex: boolean,
-    address: string,
-    dateOfBirth: string,
-  }
+    userDetail: {
+        id: string,
+        phoneNumber: string,
+        email: string,
+        gender: boolean,
+        address: string,
+        dateOfBirth: string,
+        userImage: string,
+    }
 }
 
 const UserInfomation = (props: IProps) => {
   return (
     <View style={styles.userContainer}>
-      <View >
-        <View style={styles.informationContainer}>
-          <Icon
-            type="Feather"
-            name="heart"
-            style={{fontSize: 20, color: 'black', paddingRight: 10}}
-          />
-          <Text>{props.userDetail.sex} Male</Text>
-        </View>
-        <View style={styles.informationContainer}>
-          <Icon
-            type="Feather"
-            name="heart"
-            style={{fontSize: 20, color: 'black', paddingRight: 10}}
-          />
-          <Text>{props.userDetail.address}</Text>
-        </View>
-        <View style={styles.informationContainer}>
-          <Icon
-            type="Feather"
-            name="gift"
-            style={{fontSize: 20, color: 'red', paddingRight: 10}}
-          />
-          <Text>{props.userDetail.dateOfBirth}</Text>
-        </View>
+      <View style={styles.informationContainer}>
+        <Icon
+          type="Feather"
+          name="user"
+          style={{fontSize: 20, color: '#FFC529', paddingRight: 10}}
+        />
+        <Text>{props.userDetail.gender} Male</Text>
+      </View>
+      <View style={styles.informationContainer}>
+        <Icon
+          type="Feather"
+          name="home"
+          style={{fontSize: 20, color: '#FFC529', paddingRight: 10}}
+        />
+        <Text>{props.userDetail.address}</Text>
+      </View>
+      <View style={styles.informationContainer}>
+        <Icon
+          type="Feather"
+          name="gift"
+          style={{fontSize: 20, color: '#FFC529', paddingRight: 10}}
+        />
+        <Text>{new Date(props.userDetail.dateOfBirth).toDateString()}</Text>
       </View>
     </View>
   );
@@ -54,13 +53,14 @@ const styles = StyleSheet.create({
   },
   informationContainer: {
     flexDirection: 'row',
+    width: "100%",
     justifyContent: 'flex-start',
-    padding: 20,
-    marginTop: 20,
-    margin: 10,
+    alignItems: 'center',
+    paddingLeft: 20,
+    marginBottom: 10,
     borderRadius: 10,
-    borderColor: '#FFC529',
-    borderWidth: 10,
+    height: 50,
+    backgroundColor: "#fff",
   },
 });
 

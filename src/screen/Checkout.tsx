@@ -3,31 +3,35 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   Text,
   Image,
   ScrollView,
-  TextInput,
+  TextInput, Alert,
 } from 'react-native';
 import RadioButton from '../components/RadioButton';
 import {Icon} from 'native-base';
 import IconAwesome from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from "react-redux";
-// eslint-disable-next-line no-unused-vars
+import {Login} from "./Auth";
 import {CartState} from "../containers/cartInterface";
 import {Platform, NativeModules, NativeEventEmitter} from 'react-native';
 // @ts-ignore
 import RNMomosdk from 'react-native-momosdk';
+import {removeAllCart} from "../redux/cart";
+import {useNavigation} from "@react-navigation/native";
+import {useDispatch} from "react-redux";
+import {host} from "../constants/host";
+
+
 const RNMoMoPaymentModule = NativeModules.RNMomosdk;
 const EventEmitter = new NativeEventEmitter(RNMoMoPaymentModule);
-
 const cards = [
   {
-    key: 'creditcard',
-    text: 'Credit Card',
-    cardNumber: '111111111111111',
+    key: 'momo',
+    text: 'MoMo',
+    cardNumber: '0917003003',
     imgUri:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png',
+      'https://img.mservice.io/momo-payment/icon/images/logo512.png',
   },
   {
     key: 'paypal',
@@ -49,7 +53,6 @@ const merchantname: string = "Food Order";
 const merchantcode: string = "MOMOXTMJ20200723";
 const merchantNameLabel: string = "Nhà cung cấp";
 const billdescription: string = "Total Cart";
-const amountString: number = 50000;
 const enviroment: string = "0"; // "1": production
 
 const formatNumberToMoney = (number: any,
@@ -113,19 +116,26 @@ const formatNumberToMoney = (number: any,
 
 
 const Checkout = () => {
-  const numOfProduct = 0;
-  const foodPrice = 100;
-  const deliveryPrice = 0;
-  const [amount, setAmount] = useState(amountString);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [value, setValue] = useState('momo');
+  const [amount, setAmount] = useState(0);
   const [textAmount, setTextAmount] = useState(
       formatNumberToMoney(amount, null, ""));
   const [description, setDescription] = useState('');
   const [processing, setProcessing] = useState(false);
-  const clickHandler = () => {
-    Alert.alert('Floating Button Clicked');
+  const [coupon, setCoupon] = useState('');
+  const user = useSelector((state: Login) => state.login);
+  const [totalVND, setTotalVND] = useState(0);
+  const goBackClick = () => {
+    navigation.goBack();
+  };
+  const onRemoveClick = () => {
+    dispatch(
+        removeAllCart(),
+    );
   };
   const cart = useSelector((state: CartState) => state.cart);
-
 
   useEffect(() => {
     const listenAction = () => {
@@ -173,6 +183,25 @@ const Checkout = () => {
     listenAction();
   }, []);
 
+  useEffect(() => {
+    const applyCouponCal = () => {
+      setTextAmount(formatNumberToMoney(amount, null, ""));
+    };
+    const convertUSD = () => {
+      fetch('http://api.currencylayer.com/live?access_key=576ec3baef4e5e51bf3a1a5387e471b4')
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setTotalVND(amount * data.quotes.USDVND);
+          })
+          .catch((error) => {
+            Alert.alert("Fail to apply coupon");
+            console.error('Error:', error);
+          });
+    };
+    applyCouponCal();
+    convertUSD();
+  }, [amount]);
+
   const momoHandleResponse = async (response: any) =>{
     try {
       if (response && response.status == 0) {
@@ -194,6 +223,10 @@ const Checkout = () => {
   };
 
   const onPress = async () => {
+    if (cart.total === 0) {
+      Alert.alert("Your cart is empty");
+      return;
+    }
     if (!processing) {
       const jsonData: any = {};
       jsonData.enviroment = enviroment;
@@ -203,7 +236,7 @@ const Checkout = () => {
       jsonData.merchantcode = merchantcode;
       jsonData.merchantnamelabel = merchantNameLabel;
       jsonData.description = billdescription;
-      jsonData.amount = amount;
+      jsonData.amount = totalVND;
       jsonData.orderId = "bill234284290348";
       jsonData.requestId = "bill234284290348";
       jsonData.orderLabel = "Ma don hang";
@@ -212,6 +245,15 @@ const Checkout = () => {
       if (Platform.OS === 'android') {
         const dataPayment = await RNMomosdk.requestPayment(jsonData);
         await momoHandleResponse(dataPayment);
+        if (dataPayment.status === 0) {
+          dispatch(
+              removeAllCart(),
+          );
+          setAmount(0);
+          Alert.alert("Check out successfully!");
+        } else {
+          Alert.alert("Có làm thì mới có ăn!");
+        }
         console.log("data_request_payment " + dataPayment.status);
       } else {
         RNMomosdk.requestPayment(JSON.stringify(jsonData));
@@ -224,10 +266,34 @@ const Checkout = () => {
     }
   };
 
+  const applyCoupon = () => {
+    const getCoupon = () => {
+      fetch(host + '/api/v1/discounts/' + coupon, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then((response) => response.json())
+          .then(async (data) => {
+            await setAmount(
+                cart.total - (cart.total/ 100) * data.discountPercentages);
+          })
+          .catch((error) => {
+            Alert.alert("Fail to apply coupon");
+            console.error('Error:', error);
+          });
+    };
+    if (coupon !== '') {
+      getCoupon();
+    }
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.flexbox}>
-        <TouchableOpacity style={styles.box1} onPress={clickHandler}>
+        <TouchableOpacity style={styles.box1} onPress={goBackClick}>
           <Icon
             name="chevron-left"
             type="Feather"
@@ -237,26 +303,27 @@ const Checkout = () => {
         <View>
           <Text style={styles.headerText}>Checkout Now</Text>
         </View>
-        <TouchableOpacity onPress={clickHandler} style={styles.box2}>
-          <View>
-            <Icon
-              name="x"
-              type="Feather"
-              style={{fontSize: 20, color: '#fff'}}
-            />
-          </View>
+        <TouchableOpacity onPress={onRemoveClick} style={styles.box2}>
+          <Icon
+            name="x"
+            type="Feather"
+            style={{fontSize: 20, color: '#fff'}}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        <RadioButton cards={cards}/>
+        <RadioButton cards={cards} value={value} setValue={setValue}/>
       </View>
       <View style={{flex: 1, flexDirection: 'row', marginLeft: 20}}>
         <Icon name="tag" type="Feather" style={styles.tagIcon} />
         <Text style={styles.CouponText}>Add Coupon</Text>
       </View>
       <View style={styles.CouponView}>
-        <TextInput style={styles.textInput} placeholder="Coupon Code" />
-        <TouchableOpacity style={styles.CouponImageContainer}>
+        <TextInput style={styles.textInput} value={coupon}
+          onChangeText={(value) => setCoupon(value)}
+          placeholder="Coupon Code" />
+        <TouchableOpacity onPress={applyCoupon}
+          style={styles.CouponImageContainer}>
           <Image
             style={styles.CouponImage}
             source={require('../images/ticket.png')}
@@ -269,22 +336,23 @@ const Checkout = () => {
           marginRight: 20,
         }}>
         <View style={styles.foodPrice}>
-          <Text style={styles.itemText}>Items ({numOfProduct}):</Text>
+          <Text style={styles.itemText}>
+            Items ({cart.products.length}):
+          </Text>
           <View>
             <Text style={styles.foodPriceText}>
               <IconAwesome name="dollar-sign" color="#FFC529" size={20} />
               <Text> </Text>
-              {foodPrice}
+              {cart.total}
             </Text>
           </View>
         </View>
         <View style={styles.foodPrice}>
-          <Text style={styles.itemText}>Delivery Services: </Text>
+          <Text style={styles.itemText}>Discount Price: </Text>
           <View>
             <Text style={styles.foodPriceText}>
               <IconAwesome name="dollar-sign" color="#FFC529" size={20} />
-              <Text> </Text>
-              {deliveryPrice}
+              {amount - cart.total}
             </Text>
           </View>
         </View>
