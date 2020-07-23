@@ -81,18 +81,14 @@ const Search = ({route, navigation}) => {
   return (
     <Container style={styles.container}>
       <View style={styles.returnBtn}>
-        <TouchableOpacity onPress={goBackClick}>
-          <View>
-            <Icon name="arrow-left"
-              type="Feather"
-              color={'black'}
-              style={styles.btnLeft}/>
-          </View>
+        <TouchableOpacity onPress={goBackClick} style={styles.box1}>
+          <Icon name="chevron-left"
+            type="Feather"
+            color={'black'}
+            style={styles.btnLeft}/>
         </TouchableOpacity>
-        <View>
-          <Text style={styles.searchTitle}>Search Food</Text>
-        </View>
-        <TouchableOpacity>
+        <Text style={styles.searchTitle}>Search Food</Text>
+        <TouchableOpacity style={styles.box2}>
           <Icon type="Feather" name="user"
             color="#FE724C" style={{fontSize: 20}}/>
         </TouchableOpacity>
@@ -111,16 +107,14 @@ const Search = ({route, navigation}) => {
         </Item>
       </View>
       <View style={styles.bottomContainer}>
-        <View>
-          <Text style={styles.resultFood}> Found {count} results</Text>
-          <FlatList data={array}
-            key={columnCount}
-            numColumns={2}
-            keyExtractor = { (item, index) => index.toString() }
-            renderItem={({item} : {item: IProps, index: number}) => (
-              <ProductInSearch product={item}/>
-            )}/>
-        </View>
+        <Text style={styles.resultFood}> Found {count} results</Text>
+        <FlatList data={array}
+          key={columnCount}
+          numColumns={2}
+          keyExtractor = { (item, index) => index.toString() }
+          renderItem={({item} : {item: IProps, index: number}) => (
+            <ProductInSearch product={item}/>
+          )}/>
       </View>
     </Container>
   );
@@ -128,13 +122,29 @@ const Search = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
     backgroundColor: "#f2f2f2",
     flex: 1,
     justifyContent: 'center',
   },
+  box1: {
+    borderColor: '#272D2F',
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box2: {
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFC529',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   btnLeft: {
-    fontSize: 20,
+    fontSize: 25,
     backgroundColor: 'white',
   },
   returnBtn: {
@@ -144,10 +154,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   searchTitle: {
-    marginTop: 5,
-    fontSize: 20,
+    paddingTop: 5,
+    fontSize: 25,
     fontWeight: 'bold',
-    color: 'black',
   },
   searchContainer: {
     marginTop: 30,

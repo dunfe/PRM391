@@ -23,36 +23,7 @@ interface Cart {
 }
 
 const initialState: Cart = {
-  products: [
-    {
-      product: {
-        productId: 1,
-        productName: "A",
-        shortDescription: "HAha",
-        detail: "HAhsdf",
-        calories: 1000,
-        productImage: "https://www.bbcgoodfood.com/sites/default/files/recipe-collections/collection-image/2013/05/chorizo-mozarella-gnocchi-bake-cropped.jpg",
-        timeToMake: 10,
-        categoryId: 1,
-        price: 10,
-      },
-      quality: 5,
-    },
-    {
-      product: {
-        productId: 2,
-        productName: "B",
-        shortDescription: "HAha",
-        detail: "HAhsdf",
-        calories: 1000,
-        productImage: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg",
-        timeToMake: 10,
-        categoryId: 1,
-        price: 10,
-      },
-      quality: 2,
-    },
-  ],
+  products: [],
   total: 0,
 };
 
@@ -61,16 +32,54 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart(state, action) {
-      state.products.push({
-        product: action.payload.product,
-        quality: action.payload.quality,
-      });
+      if (state.products
+          .some((item: cartProduct) =>
+            item.product.productId === action.payload.product.productId)) {
+        console.log("in");
+        const newList = state.products.map((product: cartProduct) => {
+          if (product.product.productId === action.payload.product.productId) {
+            return {
+              ...product,
+              product: product.product,
+              quality: product.quality + action.payload.quality,
+            };
+          } else return product;
+        });
+        state.products = [...newList];
+      } else {
+        state.products.push({
+          product: action.payload.product,
+          quality: action.payload.quality,
+        });
+      }
+    },
+    totalCalculator(state) {
       state.total = state.products.reduce((a, b) => {
         return a + b.product.price * b.quality;
       }, 0);
     },
+    changeQuality(state, action) {
+      state.products = state.products.map((item: cartProduct) => {
+        if (item.product.productId === action.payload.id) {
+          return {...item, quality: action.payload.quality};
+        } else return item;
+      });
+    },
+    removeFromCart(state, action) {
+      state.products = state.products
+          .filter(
+              (item) => {
+                if (item.product.productId !== action.payload.productId) {
+                  return item;
+                }
+              });
+    },
   },
 });
 
-export const {addToCart} = cartSlice.actions;
+export const {
+  addToCart,
+  changeQuality,
+  totalCalculator,
+  removeFromCart} = cartSlice.actions;
 export default cartSlice.reducer;

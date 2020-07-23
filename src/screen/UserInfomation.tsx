@@ -1,9 +1,6 @@
-import {Container} from 'native-base';
 import * as React from 'react';
-import {Alert, TouchableOpacity} from 'react-native';
-import {StyleSheet, View, Image, Text} from 'react-native';
-import IconAwesome from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Icon} from 'native-base';
+import {StyleSheet, View, Text} from 'react-native';
 
 interface IProps {
   userDetail: {
@@ -18,29 +15,28 @@ interface IProps {
 
 const UserInfomation = (props: IProps) => {
   return (
-    // User Container chứa toàn bộ thông tin của user
     <View style={styles.userContainer}>
       <View >
-        {/* thông tin của từng attribute  */}
         <View style={styles.informationContainer}>
-          <IconAwesome
-            name="transgender"
+          <Icon
+            type="Feather"
+            name="heart"
             style={{fontSize: 20, color: 'black', paddingRight: 10}}
           />
           <Text>{props.userDetail.sex} Male</Text>
-          {/* {userDetail.userName.length > 15 ? userDetail.userName.substring(0, 15) + '...' : userDetail.userName} */}
         </View>
-        {/* thông tin của từng attribute  */}
         <View style={styles.informationContainer}>
-          <FontAwesome
-            name="address-card-o"
+          <Icon
+            type="Feather"
+            name="heart"
             style={{fontSize: 20, color: 'black', paddingRight: 10}}
           />
           <Text>{props.userDetail.address}</Text>
         </View>
         <View style={styles.informationContainer}>
-          <FontAwesome
-            name="birthday-cake"
+          <Icon
+            type="Feather"
+            name="gift"
             style={{fontSize: 20, color: 'red', paddingRight: 10}}
           />
           <Text>{props.userDetail.dateOfBirth}</Text>

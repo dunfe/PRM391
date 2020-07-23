@@ -12,8 +12,11 @@ import {
 import RadioButton from '../components/RadioButton';
 import {Icon} from 'native-base';
 import IconAwesome from 'react-native-vector-icons/FontAwesome5';
+import {useSelector} from "react-redux";
+// eslint-disable-next-line no-unused-vars
+import {CartState} from "../containers/cartInterface";
 
-const PROP = [
+const cards = [
   {
     key: 'creditcard',
     text: 'Credit Card',
@@ -36,16 +39,16 @@ const PROP = [
       'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/640px-Visa.svg.png',
   },
 ];
-const App = () => {
-  const discount = 0.5;
+
+const Checkout = () => {
   const numOfProduct = 0;
   const foodPrice = 100;
   const deliveryPrice = 0;
-  const totalPrice = (foodPrice + deliveryPrice) * (1 - discount);
   const clickHandler = () => {
-    // function to handle click on floating Action Button
     Alert.alert('Floating Button Clicked');
   };
+  const cart = useSelector((state: CartState) => state.cart);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.flexbox}>
@@ -64,13 +67,13 @@ const App = () => {
             <Icon
               name="x"
               type="Feather"
-              style={{fontSize: 20, color: '#FFC529'}}
+              style={{fontSize: 20, color: '#fff'}}
             />
           </View>
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        <RadioButton PROP={PROP} />
+        <RadioButton cards={cards}/>
       </View>
       <View style={{flex: 1, flexDirection: 'row', marginLeft: 20}}>
         <Icon name="tag" type="Feather" style={styles.tagIcon} />
@@ -110,14 +113,13 @@ const App = () => {
             </Text>
           </View>
         </View>
-        <View style={styles.line}></View>
         <View style={styles.foodPrice}>
           <Text style={styles.itemText}>Total Price: </Text>
           <View>
             <Text style={styles.totalPriceText}>
               <IconAwesome name="dollar-sign" color="#FFC529" size={20} />
               <Text> </Text>
-              {totalPrice}
+              {cart.total}
             </Text>
           </View>
         </View>
@@ -129,14 +131,11 @@ const App = () => {
   );
 };
 
-export default App;
+export default Checkout;
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   ConfirmText: {
     color: 'white',
@@ -212,10 +211,10 @@ const styles = StyleSheet.create({
   box1: {
     // borderColor: '#272D2F',
     // borderWidth: 0.25,
-    // borderRadius: 10,
+    borderRadius: 10,
     width: 50,
     height: 50,
-    // backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 50,
     height: 50,
-    // backgroundColor: '#FFC529',
+    backgroundColor: '#FFC529',
     alignItems: 'center',
     justifyContent: 'center',
   },

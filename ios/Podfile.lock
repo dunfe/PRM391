@@ -310,6 +310,8 @@ PODS:
     - React
   - RNGestureHandler (1.6.1):
     - React
+  - RNMomosdk (1.3.1):
+    - React
   - RNReanimated (1.9.0):
     - React
   - RNScreens (2.9.0):
@@ -378,6 +380,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNMomosdk (from `../node_modules/react-native-momosdk`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -466,6 +469,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNMomosdk:
+    :path: "../node_modules/react-native-momosdk"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -522,6 +527,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNMomosdk: 250cc7423c370f1fc34b95499c68e4cf0c097c92
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
@@ -529,6 +535,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: b14b6546564903cf3a8301e587737a910a1c453e
+PODFILE CHECKSUM: 53bdd9ea84063596651e911075807a0a11b8f281
 
 COCOAPODS: 1.9.3

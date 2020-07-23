@@ -20,7 +20,7 @@ const product = (props: IProps) => {
   const navigation = useNavigation();
   const detailClick = () => {
     navigation.navigate('Detail', {
-      product: props.product,
+      productId: props.product.productId,
     });
   };
   return (
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     height: 300,
     width: 200,
     borderColor: '#D7D7D7',
-    borderWidth: 1.5,
     borderRadius: 30,
     padding: 5,
   },

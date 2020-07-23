@@ -1,31 +1,17 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {View, Text} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import ProductList from './ProductList';
-import CartScreen from '../screen/Cart';
 import User from "./User";
+import Cart from "./Cart";
 import TabBarIconHome from "../components/TabBarIcon/TabBarIconHome";
 import TabBarIconMenu from "../components/TabBarIcon/TabBarIconMenu";
 import TabBarIconCart from "../components/TabBarIcon/TabBarIconCart";
-import TabBarIconNotification from "../components/TabBarIcon/TabBarIconNotification";
+import TabBarIconCheckout
+  from "../components/TabBarIcon/TabBarIconCheckout";
 import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
 import Search from "./Search";
-import Radio from '../screen/Confirm';
-import { RadioButton } from 'react-native-paper';
-
-const Cart = () => {
-  return (
-    <View>
-      <CartScreen />
-    </View>
-  );
-};
-
-const Notification = () => {
-  return (
-    <Radio />
-  );
-};
+import Checkout from "./Checkout";
 
 const Tab = createBottomTabNavigator();
 
@@ -62,11 +48,11 @@ const MyTabs = () => {
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={Notification}
+        name="Checkout"
+        component={Checkout}
         options={{
-          tabBarLabel: 'Notification',
-          tabBarIcon: TabBarIconNotification,
+          tabBarLabel: 'Checkout',
+          tabBarIcon: TabBarIconCheckout,
         }}
       />
       <Tab.Screen
@@ -83,7 +69,9 @@ const MyTabs = () => {
 
 const ScreenHome = () => {
   return (
-    <MyTabs />
+    <SafeAreaView style={{flex: 1}}>
+      <MyTabs />
+    </SafeAreaView>
   );
 };
 
