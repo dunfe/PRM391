@@ -22,7 +22,6 @@ import {useNavigation} from "@react-navigation/native";
 import {useDispatch} from "react-redux";
 import {host} from "../constants/host";
 
-
 const RNMoMoPaymentModule = NativeModules.RNMomosdk;
 const EventEmitter = new NativeEventEmitter(RNMoMoPaymentModule);
 const cards = [
@@ -282,10 +281,15 @@ const Checkout = () => {
           'Authorization': 'bearer ' + user.jwtToken,
         },
       })
-          .then((response) => response.json())
-          .then(async (data) => {
-            await setAmount(
-                cart.total - (cart.total/ 100) * data.discountPercentages);
+          .then( async (response) => {
+            const data = await response.json();
+            if (response.status === 200) {
+              await setAmount(
+                  cart.total - (cart.total/ 100) * data.discountPercentages);
+            } else {
+              setCoupon('');
+              Alert.alert("Error: " + data.title);
+            }
           })
           .catch((error) => {
             Alert.alert("Fail to apply coupon");
