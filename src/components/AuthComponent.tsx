@@ -4,11 +4,12 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  Platform, ImageBackground,
+  Platform,
 } from 'react-native';
 import {Tab, Tabs} from 'native-base';
 import LoginRegister from './LoginRegister';
 import {Row, Grid} from "react-native-easy-grid";
+import LottieView from 'lottie-react-native';
 
 interface IProps {
   email: string,
@@ -35,11 +36,8 @@ const AuthComponent = (props: IProps) => {
       behavior={Platform.OS === 'ios' ? 'padding': 'height'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Grid >
-          <Row size={50}>
-            <ImageBackground
-              resizeMode={"cover"}
-              style={styles.backgroundImage}
-              source={require('../images/login_img_2-01.jpg')}/>
+          <Row size={50} style={{backgroundColor: "#fff"}}>
+            <LottieView source={require('../images/login.json')} autoPlay loop/>
           </Row>
           <Row size={50}>
             <Tabs tabBarUnderlineStyle={styles.tabUnderStyle}

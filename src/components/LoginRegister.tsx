@@ -10,9 +10,12 @@ import {
   Icon,
   StyleProvider,
 } from 'native-base';
-import {useEffect} from 'react';
 import getTheme from "../../native-base-theme/components";
 import customVariables from "../../native-base-theme/variables/platform";
+import {useSelector} from "react-redux";
+import {Login} from "../screen/Auth";
+import {useEffect, useState} from "react";
+import LottieView from 'lottie-react-native';
 
 interface IProps {
     email: string,
@@ -28,9 +31,25 @@ interface IProps {
 }
 
 const LoginRegister = (props: IProps) => {
+  const user = useSelector((state: Login) => state.login);
+  const [loading, setLoading] = useState(false);
+  const login = () => {
+    props.loginClick();
+    if (props.emailValidation) {
+      setLoading(true);
+    }
+  };
+
+  useEffect(() => {
+    const changeLoading = () => {
+      if (user.jwtToken === "") {
+        setLoading(false);
+      }
+    };
+    changeLoading();
+  }, [user]);
   return (
     <StyleProvider style={getTheme(customVariables)}>
-
       <View>
         <Form>
           <Item floatingLabel>
@@ -52,13 +71,16 @@ const LoginRegister = (props: IProps) => {
               onPress={props.onEyePress}/> : <Icon/>}
           </Item>
         </Form>
-        <Button primary rounded block
-          onPress={() => props.loginClick()}
-          style={styles.button}>
-          <Text style={styles.text}>
-            {props.mode === 'login' ? 'Login' : 'Register'}
-          </Text>
-        </Button>
+        {loading ? <LottieView
+          source={require('../images/loading.json')}
+          autoPlay loop/> :
+            <Button primary rounded block
+              onPress={login}
+              style={styles.button}>
+              <Text style={styles.text}>
+                {props.mode === 'login' ? 'Login' : 'Register'}
+              </Text>
+            </Button> }
       </View>
     </StyleProvider>
   );

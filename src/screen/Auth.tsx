@@ -141,8 +141,12 @@ const Auth = ({navigation, ...props}: IProps) => {
   };
 
   const loginClick = async () => {
-    console.log('Login...');
-    await loginAsync();
+    if (emailValidation) {
+      console.log('Login...');
+      await loginAsync();
+    } else {
+      Alert.alert("Email must valid!");
+    }
   };
 
   useEffect(() => {
