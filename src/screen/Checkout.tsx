@@ -202,6 +202,13 @@ const Checkout = () => {
     convertUSD();
   }, [amount]);
 
+  useEffect(() => {
+    const updateTotal = () => {
+      setAmount(cart.total);
+    };
+    updateTotal();
+  }, [cart.total]);
+
   const momoHandleResponse = async (response: any) =>{
     try {
       if (response && response.status == 0) {
