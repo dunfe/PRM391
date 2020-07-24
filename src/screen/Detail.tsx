@@ -21,6 +21,7 @@ import {Login} from "./Auth";
 // eslint-disable-next-line no-unused-vars
 import {Product} from "../containers/cartInterface";
 import SpinnerView from "../components/SpinnerView";
+import {update} from "../redux/add";
 
 type RootStackParamList = {
     product: {
@@ -46,6 +47,10 @@ interface IProps {
     navigation: ProfileScreenNavigationProp;
 }
 
+export interface Update {
+  update: boolean
+}
+
 const windowWidth = Dimensions.get('window').width;
 
 const initProduct: Product = {
@@ -66,6 +71,7 @@ const Detail = ({route, navigation}: IProps) => {
   // @ts-ignore
   const {productId} = route.params;
   const user = useSelector((state: Login) => state.login);
+  const updateChange = useSelector((state: Update) => state.update);
   const [favouriteChange, setFavouriteChange] = useState(false);
   const [product, setProduct] = useState<Product>(initProduct);
   const [count, setCount] = useState(0);
@@ -80,13 +86,15 @@ const Detail = ({route, navigation}: IProps) => {
   };
 
   const addToCartClick = () => {
-    console.log(count);
-    dispatch(
-        addToCart({
-          product: product,
-          quality: count,
-        }),
-    );
+    if (count > 0) {
+      console.log(count);
+      dispatch(
+          addToCart({
+            product: product,
+            quality: count,
+          }),
+      );
+    }
   };
 
   const goBackClick = () => {
@@ -111,7 +119,7 @@ const Detail = ({route, navigation}: IProps) => {
           });
     };
     getProduct();
-  }, [favouriteChange]);
+  }, [favouriteChange, updateChange]);
 
   const onHeart = () => {
     const setFavourite = () => {
@@ -127,6 +135,9 @@ const Detail = ({route, navigation}: IProps) => {
         })
             .then((response) => {
               if (response.status === 200) {
+                dispatch(
+                    update(),
+                );
                 setFavouriteChange(!favouriteChange);
               }
             });

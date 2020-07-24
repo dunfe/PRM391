@@ -50,14 +50,23 @@ const Search = ({route, navigation}) => {
   };
 
   const {searchTextTemp} = route.params ? route.params : '';
-  const [searchText, setSearchText] = useState(searchTextTemp);
+  const [searchText, setSearchText] = useState('');
   const [count, setCount] = useState(0);
   const user = useSelector((state: Login) => state.login);
   const [array, setArray] = useState([]);
 
   useEffect(() => {
-    console.log(searchText);
+    const setTextTemp = () => {
+      if (searchTextTemp !== '') {
+        setSearchText(searchTextTemp);
+      }
+    };
+    setTextTemp();
+  }, [searchTextTemp]);
+
+  useEffect(() => {
     const searchProduct = () => {
+      console.log(searchText);
       if (searchText !== '') {
         fetch(host + '/api/v1/products/search/' + searchText, {
           method: 'GET',
@@ -74,10 +83,24 @@ const Search = ({route, navigation}) => {
             .catch((error) => {
               console.error('Error:', error);
             });
+      } else {
+        setArray([]);
       }
     };
     searchProduct();
   }, [searchText]);
+
+  const foundText = () => {
+    if (searchText) {
+      return (
+        <Text style={styles.resultFood}>
+            Found {count} results
+        </Text>
+      );
+    } else {
+      return <Text/>;
+    }
+  };
   return (
     <Container style={styles.container}>
       <View style={styles.returnBtn}>
@@ -90,7 +113,7 @@ const Search = ({route, navigation}) => {
         <Text style={styles.searchTitle}>Search Food</Text>
         <TouchableOpacity style={styles.box2}>
           <Icon type="Feather" name="user"
-            color="#FE724C" style={{fontSize: 20}}/>
+            style={{fontSize: 20, color: "#fff"}}/>
         </TouchableOpacity>
       </View>
       <View style={{marginTop: 30, marginHorizontal: 20}}>
@@ -107,7 +130,7 @@ const Search = ({route, navigation}) => {
         </Item>
       </View>
       <View style={styles.bottomContainer}>
-        <Text style={styles.resultFood}> Found {count} results</Text>
+        {foundText()}
         <FlatList data={array}
           key={columnCount}
           numColumns={2}

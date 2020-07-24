@@ -19,6 +19,9 @@ import {Login} from "./Auth";
 import {Product} from "../containers/cartInterface";
 import UserInfomation from "./UserInfomation";
 import AsyncStorage from '@react-native-community/async-storage';
+import {Update} from "./Detail";
+import {useIsFocused} from '@react-navigation/native';
+
 
 interface User {
   id: string,
@@ -45,11 +48,13 @@ const User = () => {
   const navigation = useNavigation();
   const [favourite, setFavourite] = useState([]);
   const [favouriteChange, setFavouriteChange] = useState(false);
+  const updateChange = useSelector((state: Update) => state.update);
 
   const updateAVatar = () => {
     // function to handle click on floating Action Button
     Alert.alert('Bạn có muốn update hokkk?');
   };
+  const isFocused = useIsFocused();
 
   const goBackClick = () => {
     navigation.goBack();
@@ -101,7 +106,7 @@ const User = () => {
           });
     };
     getFavourite();
-  }, [favouriteChange]);
+  }, [isFocused, favouriteChange]);
 
   const removeFavourite = (productId: number) => {
     const remove = () => {
