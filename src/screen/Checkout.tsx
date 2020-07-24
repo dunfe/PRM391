@@ -116,12 +116,13 @@ const formatNumberToMoney = (number: any,
 
 
 const Checkout = () => {
+  const cart = useSelector((state: CartState) => state.cart);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [value, setValue] = useState('momo');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(cart.total);
   const [textAmount, setTextAmount] = useState(
-      formatNumberToMoney(amount, null, ""));
+      formatNumberToMoney(cart.total, null, ""));
   const [description, setDescription] = useState('');
   const [processing, setProcessing] = useState(false);
   const [coupon, setCoupon] = useState('');
@@ -135,7 +136,6 @@ const Checkout = () => {
         removeAllCart(),
     );
   };
-  const cart = useSelector((state: CartState) => state.cart);
 
   useEffect(() => {
     const listenAction = () => {

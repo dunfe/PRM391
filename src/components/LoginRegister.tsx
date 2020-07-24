@@ -32,12 +32,14 @@ interface IProps {
 
 const LoginRegister = (props: IProps) => {
   const user = useSelector((state: Login) => state.login);
+  const [buttonClick, setButtonClick] = useState(false);
   const [loading, setLoading] = useState(false);
   const login = () => {
     props.loginClick();
     if (props.emailValidation) {
       setLoading(true);
     }
+    setButtonClick(!buttonClick);
   };
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const LoginRegister = (props: IProps) => {
       }
     };
     changeLoading();
-  }, [user]);
+  }, [user, buttonClick]);
   return (
     <StyleProvider style={getTheme(customVariables)}>
       <View>

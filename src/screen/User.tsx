@@ -57,7 +57,7 @@ const User = () => {
 
   useEffect(() => {
     const getUserInformation = () => {
-      fetch(host + '/api/v1/user/' + user.email, {
+      fetch(host + '/api/v1/users/' + user.email, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +65,7 @@ const User = () => {
         },
       })
           .then( async (response) => {
+            console.log(response.status + user.email);
             if (response.status === 200) {
               const data = await response.json();
               await setUserInformation(data);
