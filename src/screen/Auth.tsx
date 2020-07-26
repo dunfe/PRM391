@@ -6,19 +6,22 @@ import AuthComponent from '../components/AuthComponent';
 import {host} from '../constants/host';
 import {useDispatch, useSelector} from "react-redux";
 import {signIn} from "../redux/login";
-import {Alert, ImageBackground, StatusBar, StyleSheet, Text, View} from "react-native";
+import {Alert,
+  StatusBar, StyleSheet, Text, View} from "react-native";
 import AsyncStorage from '@react-native-community/async-storage';
 import {slides} from "../constants/sliders";
 import AppIntroSlider from "react-native-app-intro-slider";
+import LottieView from "lottie-react-native";
 
 type AuthScreenProps = StackNavigationProp<any, any>;
 
 interface IProps {
   navigation: AuthScreenProps,
 }
-interface Login {
+export interface Login {
   login: {
     jwtToken: string,
+    email: string,
   }
 }
 
@@ -37,38 +40,31 @@ const Auth = ({navigation, ...props}: IProps) => {
   };
   const _renderItem = ({item}: {item: Item}) => {
     return (
-      <ImageBackground style={styles.slide} source={item.image}>
+      <View style={styles.slide}>
+        <LottieView source={item.image} autoPlay loop/>
         <Text style={styles.text}>{item.text}</Text>
-      </ImageBackground>
+      </View>
     );
   };
   const _keyExtractor = (item: Item) => item.title;
-
-  let modeURL = '/api/v1/identity/login';
-  useEffect(() => {
-    if (mode === 'login') {
-      modeURL = '/api/v1/identity/login';
-    } else {
-      modeURL = '/api/v1/identity/register';
-    }
-    console.log(mode);
-  }, [mode]);
-
-  const storeToken = async (token: string) => {
+  const storeToken = async (token: string, email: string) => {
     try {
       await AsyncStorage.setItem('token', token);
+      await AsyncStorage.setItem('email', email);
     } catch (e) {
       console.log('Something wrong', e);
     }
   };
-
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
+      const emailStorage = await AsyncStorage.getItem('email');
+
       if (token !== null) {
         dispatch(
             signIn({
               jwtToken: token,
+              email: emailStorage,
             }),
         );
       }
@@ -76,10 +72,9 @@ const Auth = ({navigation, ...props}: IProps) => {
       console.log("Something wrong " + e);
     }
   };
-
   const loginAsync = async () => {
     try {
-      await fetch(host + modeURL, {
+      await fetch(host + '/api/v1/identity/' + mode, {
         method: 'POST',
         headers: {
           'Accept': '*/*',
@@ -96,15 +91,17 @@ const Auth = ({navigation, ...props}: IProps) => {
             dispatch(
                 signIn({
                   jwtToken: json.jwtToken,
+                  email: email,
                 }),
             );
-            await storeToken(json.jwtToken);
+            await storeToken(json.jwtToken, email);
           } else {
             Alert.alert("Register successful, please login!");
             navigation.navigate("Auth");
           }
         } else {
-          Alert.alert("error: " + response.status);
+          const data = await response.json();
+          Alert.alert("Error: " + data.errors);
         }
       }).catch((error) => {
         Alert.alert(error);
@@ -115,7 +112,6 @@ const Auth = ({navigation, ...props}: IProps) => {
       console.log('Done');
     }
   };
-
   const onEmailChange = (value: string) => {
     // eslint-disable-next-line max-len
     const reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
@@ -133,8 +129,12 @@ const Auth = ({navigation, ...props}: IProps) => {
   };
 
   const loginClick = async () => {
-    console.log('Login...');
-    await loginAsync();
+    if (emailValidation) {
+      console.log('Login...');
+      await loginAsync();
+    } else {
+      Alert.alert("Email must valid!");
+    }
   };
 
   useEffect(() => {
@@ -185,6 +185,7 @@ Auth.propTypes = {
 
 const styles = StyleSheet.create({
   slide: {
+    backgroundColor: "#FFC529",
     flex: 1,
     resizeMode: 'cover',
   },

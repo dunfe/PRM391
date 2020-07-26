@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import SpinnerView from "./SpinnerView";
 
 interface IProps {
     product: {
@@ -20,14 +21,14 @@ const product = (props: IProps) => {
   const navigation = useNavigation();
   const detailClick = () => {
     navigation.navigate('Detail', {
-      product: props.product,
+      productId: props.product.productId,
     });
   };
   return (
     <TouchableOpacity onPress={detailClick}>
       <View style={styles.product}>
-        <Image style={styles.productImage}
-          source={{uri: props.product.productImage}} />
+        {props.product.productImage !== "" ? <Image style={styles.productImage}
+          source={{uri: props.product.productImage}} /> : <SpinnerView/>}
         <Text numberOfLines={1}
           style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
           {props.product.productName}
@@ -45,7 +46,6 @@ const product = (props: IProps) => {
         </View>
         <View
           style={{
-            marginBottom: 15,
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 5,
   },
   coinImg: {
     height: 20,
@@ -95,7 +94,6 @@ const styles = StyleSheet.create({
     height: 300,
     width: 200,
     borderColor: '#D7D7D7',
-    borderWidth: 1.5,
     borderRadius: 30,
     padding: 5,
   },

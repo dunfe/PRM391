@@ -1,85 +1,112 @@
-/* eslint-disable require-jsdoc */
-// import React, {Component} from 'react';
-// eslint-disable-next-line no-unused-vars
 import {
   View,
   Image,
   StyleSheet,
   Text,
+<<<<<<< HEAD
   TouchableOpacity,
+=======
+  TouchableHighlight, TouchableOpacity,
+>>>>>>> e7fd94a5edbf94d97d748b65b82acd78b8a13fc8
 } from 'react-native';
-import React, {Component} from 'react';
+import React from 'react';
 import InputSpinner from 'react-native-input-spinner';
-import {Icon} from 'native-base';
+import {useDispatch} from "react-redux";
+import {changeQuality} from "../redux/cart";
+import {useNavigation} from '@react-navigation/native';
 
-export default class ProductInCart extends Component<{
-  imgUri: string;
+interface Product {
+  productId: number;
   productName: string;
-  description: string;
+  shortDescription: string;
+  detail: string;
+  calories: number;
   price: number;
+  productImage: string;
+  timeToMake: number;
+  categoryId: number;
+}
+
+interface IProps {
+  product: Product;
   quality: number;
-}> {
-  // eslint-disable-next-line require-jsdoc
-  render() {
-    return (
-      <View style={{height: 130}}>
-        <View style={styles.product}>
-          <View>
-            <Image style={styles.productImage}
-              source={{uri: this.props.imgUri}} />
-          </View>
-          <View style={{paddingLeft: 10}}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Text style={{marginTop: 10, fontSize: 19, fontWeight: 'bold'}}>
-                {this.props.productName}
-              </Text>
-              <TouchableOpacity>
-                <Icon style={styles.iconStyle} name="trash-2" type="Feather"/>
-              </TouchableOpacity>
-            </View>
-            <Text style={{marginTop: 5, fontSize: 15, color: '#c9c9c9'}}>
-              {this.props.description}
-            </Text>
-            <View
-              style={{
-                marginBottom: 15,
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Image
-                style={styles.coinImg}
-                source={require('../images/money.png')}
+}
+const ProductInCart = (props: IProps) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const onChange = (id: number, value: number) => {
+    dispatch(
+        changeQuality({
+          id: id,
+          quality: value,
+        }),
+    );
+  };
+
+  const detailClick = () => {
+    navigation.navigate('Detail', {
+      productId: props.product.productId,
+    });
+  };
+
+  return (
+    <TouchableOpacity onPress={detailClick}
+      style={{height: 130, marginBottom: 10}}>
+      <View style={styles.product}>
+        <Image style={styles.productImage}
+          resizeMode={"cover"}
+          source={{uri: props.product.productImage}}/>
+        <View style={{paddingLeft: 10, flex: 1}}>
+          <Text numberOfLines={1} style={{paddingTop: 10, marginRight: 10,
+            fontSize: 19, flexWrap: "wrap",
+            fontWeight: 'bold'}}>
+            {props.product.productName}
+          </Text>
+          <Text
+            numberOfLines={2}
+            style={{
+              flexWrap: "wrap",
+              textAlign: "left",
+              paddingTop: 5,
+              fontSize: 15,
+              color: '#c9c9c9'}}>
+            {props.product.shortDescription}
+          </Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              style={styles.coinImg}
+              source={require('../images/money.png')}
+            />
+            <Text style={styles.price}>{props.product.price}</Text>
+            {props.quality > 0 ?
+            <View style={styles.inputSpinner}>
+              <InputSpinner
+                inputStyle={{width: 30}}
+                max={100}
+                min={1}
+                onChange={(value) => onChange(props.product.productId, value)}
+                value={props.quality}
+                step={1}
+                width={110}
+                height={37}
+                fontSize={13}
+                buttonTextColor={'#272D2F'}
+                buttonFontSize={15}
+                color={'#FFC529'}
               />
-              <Text style={styles.price}>{this.props.price}</Text>
-              <View style={styles.inputSpinner}>
-                <InputSpinner
-                  inputStyle={{width: 30}}
-                  max={100}
-                  min={1}
-                  value={this.props.quality}
-                  step={1}
-                  width={110}
-                  height={37}
-                  fontSize={13}
-                  // background={'#FFC529'}
-                  buttonTextColor={'#272D2F'}
-                  buttonFontSize={15}
-                  color={'#FFC529'}
-                />
-              </View>
-            </View>
+            </View> :
+                <Text/>}
           </View>
         </View>
       </View>
-    );
-  }
-}
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   iconStyle: {
@@ -102,21 +129,27 @@ const styles = StyleSheet.create({
     width: 20,
   },
   productImage: {
+    margin: 10,
     height: 100,
     width: 100,
-    margin: 10,
+    borderRadius: 100,
   },
   product: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+<<<<<<< HEAD
     backgroundColor: '#FFC529',
     // alignItems: 'center',
+=======
+    backgroundColor: '#ffffff',
+>>>>>>> e7fd94a5edbf94d97d748b65b82acd78b8a13fc8
     marginLeft: 20,
     marginRight: 20,
-    height: 130,
+    maxHeight: 130,
     borderColor: '#D7D7D7',
-    borderWidth: 1.5,
-    borderRadius: 30,
+    borderRadius: 10,
   },
 });
+
+export default ProductInCart;

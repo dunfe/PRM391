@@ -22,7 +22,7 @@ const ProductInSearch = (props: IProps) => {
   const navigation = useNavigation();
   const detailClick = () => {
     navigation.navigate('Detail', {
-      product: props.product,
+      productId: props.product.productId,
     });
   };
   return (

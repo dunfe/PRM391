@@ -1,53 +1,46 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 /* eslint-disable require-jsdoc */
-import React, {Component} from 'react';
+import React from 'react';
 import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 
-export default class RadioButton extends Component {
-  state = {
-    value: null,
-  };
 
-  render() {
-    const {PROP} = this.props;
-    const {value} = this.state;
-
-    return (
-      <View>
-        {PROP.map(
-            (res: {
-            key: string | number | undefined;
+interface IProps {
+  cards: any;
+  value: string,
+  setValue: (event: any) => void;
+}
+const RadioButton = (props: IProps) => {
+  return (
+    <View>
+      {props.cards.map(
+          (res: {
+            key: string;
             text: React.ReactNode;
             imgUri: string;
             cardNumber: string;
           }) => {
-              return (
-                <View key={res.key} style={styles.container}>
-                  <View>
-                    <Image style={styles.image} source={{uri: res.imgUri}} />
-                  </View>
-                  <View style={styles.text}>
-                    <Text style={styles.radioText}>{res.text}</Text>
-                    <Text style={styles.cardNumber}>{res.cardNumber}</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={styles.radioCircle}
-                    onPress={() => {
-                      this.setState({
-                        value: res.key,
-                      });
-                    }}>
-                    {value === res.key && <View style={styles.selectedRb} />}
-                  </TouchableOpacity>
+            return (
+              <View key={res.key} style={styles.container}>
+                <View>
+                  <Image style={styles.image} source={{uri: res.imgUri}} />
                 </View>
-              );
-            },
-        )}
-      </View>
-    );
-  }
-}
+                <View style={styles.text}>
+                  <Text style={styles.radioText}>{res.text}</Text>
+                  <Text style={styles.cardNumber}>{res.cardNumber}</Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.radioCircle}
+                  onPress={() => props.setValue(res.key)}>
+                  {props.value === res.key && <View style={styles.selectedRb} />}
+                </TouchableOpacity>
+              </View>
+            );
+          },
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,8 +49,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     // width: 370,
-    borderRadius: 30,
-    borderWidth: 2,
+    borderRadius: 10,
     borderColor: '#D7D7D7',
     marginBottom: 20,
     alignItems: 'center',
@@ -106,3 +98,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3FBFE',
   },
 });
+
+export default RadioButton;

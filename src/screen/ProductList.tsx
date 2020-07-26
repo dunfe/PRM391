@@ -133,19 +133,15 @@ const ProductListScreen = () => {
       searchTextTemp: searchText,
     });
   };
+  const onUser = () => {
+    navigation.navigate("User");
+  };
   return (
     <ScrollView
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
       <View style={styles.flexbox}>
-        <TouchableOpacity style={styles.box1}>
-          <Icon
-            name="align-left"
-            type="Feather"
-            style={{fontSize: 20, color: '#272D2F'}}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box2}>
+        <TouchableOpacity onPress={onUser} style={styles.box2}>
           <Icon
             name="user"
             onPress={() => navigation.navigate("User")}
@@ -231,14 +227,13 @@ const styles = StyleSheet.create({
     marginRight: 20,
     paddingTop: 20,
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
   },
   topText: {
     fontSize: 35,
     paddingLeft: 20,
     fontWeight: 'bold',
-    fontFamily: 'Montserrat',
   },
   container: {
     flex: 1,

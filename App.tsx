@@ -27,6 +27,7 @@ const App: React.FC = () => {
           <Stack.Screen name="Auth" component={Auth}/>
           <Stack.Screen name="Home" component={Home}/>
           <Stack.Screen name="Detail" component={Detail}/>
+          <Stack.Screen name="Search" component={Search}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -1,68 +1,153 @@
-import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
-import {Icon} from 'native-base';
-import TopTab from '../components/TopTabbar';
+import * as React from 'react';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import ProductInCart from '../components/ProductInCart';
+import {useSelector} from "react-redux";
+import {Icon} from "native-base";
+import {View} from "native-base";
+import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity} from "react-native";
+import {useDispatch} from "react-redux";
+import {removeFromCart, totalCalculator} from "../redux/cart";
+import {useEffect} from "react";
+import {useNavigation} from "@react-navigation/native";
 
-const CartScreen = () => {
-  const clickHandler = () => {
-    // function to handle click on floating Action Button
-    Alert.alert('Floating Button Clicked');
+interface Product {
+    productId: number;
+    productName: string;
+    shortDescription: string;
+    detail: string;
+    calories: number;
+    price: number;
+    productImage: string;
+    timeToMake: number;
+    categoryId: number;
+}
+
+interface cartProduct {
+    product: Product,
+    quality: number,
+}
+
+interface Cart {
+    products: cartProduct[],
+    total: number,
+}
+
+interface CartState {
+    cart: Cart
+}
+
+const Cart = () => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const cart = useSelector((state: CartState) => state.cart);
+
+  const onRemove = (productId: number) => {
+    console.log(productId);
+    console.log(cart.products);
+    dispatch(
+        removeFromCart(
+            {
+              productId: productId,
+            },
+        ),
+    );
+  };
+  const goBackClick = () => {
+    navigation.goBack();
   };
 
+  useEffect(() => {
+    dispatch(
+        totalCalculator(),
+    );
+  }, [cart]);
+
+  const header = (
+    <View style={styles.flexbox}>
+      <TouchableOpacity onPress={goBackClick} style={styles.box1}>
+        <Icon
+          name="chevron-left"
+          type="Feather"
+          style={{fontSize: 25, color: '#272D2F'}}
+        />
+      </TouchableOpacity>
+      <Text style={styles.headerText}>Your Cart</Text>
+      <TouchableOpacity style={styles.box2}>
+        <Icon
+          name="shopping-bag"
+          type="Feather"
+          style={{fontSize: 20, color: '#FFFFFF'}}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+
+  const empty = () => {
+    return (
+      <View style={{width: "100%", alignItems: "center"}}>
+        <Text>Empty</Text>
+      </View>
+    );
+  };
   return (
-    <ScrollView
-      scrollEnabled={false}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}>
-      <View style={{backgroundColor: 'white'}}>
-        <View style={styles.flexbox}>
-          <TouchableOpacity style={styles.box1} onPress={clickHandler}>
-            <Icon
-              name="chevron-left"
-              type="Feather"
-              style={{fontSize: 25, color: '#272D2F'}}
-            />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.headerText}>Your Cart</Text>
-          </View>
-          <TouchableOpacity onPress={clickHandler} style={styles.box2}>
-            <View>
-              <Icon
-                name="user"
-                type="Feather"
-                style={{fontSize: 20, color: '#FFFFFF'}}
-              />
-            </View>
+    <SwipeListView
+      data={cart.products}
+      ListHeaderComponent={header}
+      ListEmptyComponent={empty}
+      keyExtractor={(item: cartProduct) => item.product.productId + ""}
+      renderItem={ (data) => (
+        <ProductInCart
+          quality={data.item.quality}
+          product={data.item.product}
+        />
+      )}
+      renderHiddenItem={ (data) => (
+        <View style={styles.rowBack}>
+          <TouchableOpacity
+            style={[styles.backRightBtn, styles.backRightBtnRight]}
+            onPress={() => onRemove(data.item.product.productId)}
+          >
+            <Icon type="Feather" name="trash"/>
           </TouchableOpacity>
         </View>
-      </View>
-      <TopTab />
-    </ScrollView>
+
+      )}
+      rightOpenValue={-75}
+    />
   );
 };
 
 const styles = StyleSheet.create({
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+  },
+  backRightBtnRight: {
+    right: 10,
+  },
   flexbox: {
+    flex: 1,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 20,
+    paddingTop: 20,
     marginBottom: 10,
-    flex: 1,
     alignContent: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   box1: {
     borderColor: '#272D2F',
-    borderWidth: 0.25,
     borderRadius: 10,
     width: 50,
     height: 50,
@@ -79,11 +164,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerText: {
-    // alignItems: 'center',
     paddingTop: 5,
     fontSize: 25,
     fontWeight: 'bold',
   },
 });
 
-export default CartScreen;
+export default Cart;

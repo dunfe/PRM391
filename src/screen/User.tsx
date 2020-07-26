@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,118 +7,243 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {Icon, Container} from 'native-base';
-import UserBar from '../components/UserBar';
+import {Icon} from 'native-base';
+import {useNavigation} from "@react-navigation/native";
+import ProductInCart from "../components/ProductInCart";
+import {SwipeListView} from "react-native-swipe-list-view";
+import {host} from "../constants/host";
+import {useSelector} from "react-redux";
+import {logOut} from "../redux/login";
+import {useDispatch} from "react-redux";
+import {Login} from "./Auth";
+import {Product} from "../containers/cartInterface";
+import UserInfomation from "./UserInfomation";
+import AsyncStorage from '@react-native-community/async-storage';
+import {Update} from "./Detail";
+import {useIsFocused} from '@react-navigation/native';
 
-const userDetail = {
-  userId: '156A860',
-  userName: 'Hai Rio',
-  email: 'hainn@gmail.com',
-  sex: true,
-  address: 'Hà Nội',
-  dateOfBirth: '23/8/1999',
-};
+
+interface User {
+  id: string,
+  phoneNumber: string,
+  email: string,
+  gender: boolean,
+  address: string,
+  dateOfBirth: string,
+  userImage: string,
+}
 
 const User = () => {
-  const clickHandler = () => {
-    // function to handle click on floating Action Button
-    Alert.alert('1');
-  };
+  const dispatch = useDispatch();
+  const user = useSelector((state: Login) => state.login);
+  const [userInformation, setUserInformation] = useState<User>({
+    "id": "4eb16f6e-4202-499f-8d0e-c9d310a7b4a0",
+    "email": "dung@gmail.com",
+    "phoneNumber": "09123456789",
+    "address": "Km 26 Đại Lộ Thăng Long, Đại học FPT Hòa Lạc",
+    "gender": true,
+    "dateOfBirth": "1997-01-01T00:00:00",
+    "userImage": 'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg',
+  });
+  const navigation = useNavigation();
+  const [favourite, setFavourite] = useState([]);
+  const [favouriteChange, setFavouriteChange] = useState(false);
+  const updateChange = useSelector((state: Update) => state.update);
 
   const updateAVatar = () => {
     // function to handle click on floating Action Button
     Alert.alert('Bạn có muốn update hokkk?');
   };
+  const isFocused = useIsFocused();
+
+  const goBackClick = () => {
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    const getUserInformation = () => {
+      fetch(host + '/api/v1/users/' + user.email, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then( async (response) => {
+            console.log(response.status + user.email);
+            if (response.status === 200) {
+              const data = await response.json();
+              await setUserInformation(data);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    };
+    getUserInformation();
+  }, []);
+
+  useEffect(() => {
+    const getFavourite = () => {
+      fetch(host + '/api/v1/favourites/' + user.email, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then( async (response) => {
+            console.log(response.status);
+            if (response.status === 200) {
+              const data = await response.json();
+              await setFavourite(data);
+            } else {
+              setFavourite([]);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    };
+    getFavourite();
+  }, [isFocused, favouriteChange]);
+
+  const removeFavourite = (productId: number) => {
+    const remove = () => {
+      fetch(host + '/api/v1/favourites/' + user.email + "/" +
+          productId, {
+        method: 'DELETE',
+        headers: {
+          'accept': '*/*',
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + user.jwtToken,
+        },
+      })
+          .then((response) => {
+            console.log(response.status);
+            setFavouriteChange(!favouriteChange);
+          });
+    };
+    remove();
+  };
+
+  const header = () => {
+    return (
+      <View style={{marginHorizontal: 20}}>
+        <TouchableOpacity onPress={goBackClick}
+          style={styles.btnLeftPosition}>
+          <Icon
+            type="Feather"
+            name="arrow-left"
+            style={styles.btnLeft}/>
+        </TouchableOpacity>
+        <View style={styles.userDetailContainer}>
+          <TouchableOpacity onPress={updateAVatar}>
+            <Image style={styles.userImage}
+              source={{uri: userInformation.userImage}} />
+          </TouchableOpacity>
+          <View style={{flexDirection: "column",
+            width: 200,
+            marginVertical: 10}}>
+            <Text numberOfLines={1}
+              style={{fontSize: 20,
+                flex: 1, textAlign: "left", fontWeight: 'bold'}}>
+              {userInformation.email}
+            </Text>
+            <View>
+              <Text numberOfLines={1}
+                style={{flex: 1,
+                  textAlign: "left",
+                  fontSize: 15,
+                  color: '#D7D7D7'}}>
+                {userInformation.phoneNumber}
+              </Text>
+              <Text numberOfLines={1}
+                style={{flex: 1,
+                  textAlign: "left",
+                  fontSize: 15,
+                  color: '#d7d7d7'}}>
+                {userInformation.address}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <UserInfomation userDetail={userInformation} />
+        <Text style={{fontSize: 20, marginBottom: 10, fontWeight: "bold"}}>
+          Favourite Products: {favourite.length}
+        </Text>
+      </View>
+    );
+  };
+
+  const onLogOut = async () => {
+    try {
+      console.log(await AsyncStorage.getItem('token'));
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('email');
+
+      console.log(await AsyncStorage.getItem('token'));
+      await dispatch(
+          logOut(),
+      );
+      navigation.navigate("Auth");
+    } catch (exception) {
+      console.log("Error: " + exception);
+    }
+  };
+
+  const footer = () => {
+    return (
+      <TouchableOpacity onPress={onLogOut} style={{backgroundColor: "#FFC529",
+        margin: 20,
+        borderRadius: 30,
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center"}}>
+        <Text>Log out</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <Container>
-      <View style={{backgroundColor: 'white'}}>
-        <View style={styles.flexbox}>
-          <TouchableOpacity style={styles.returnBtn} onPress={clickHandler}>
-            <Icon
-              name="chevron-left"
-              type="Feather"
-              style={{fontSize: 25, color: '#272D2F'}}
-            />
+    <SwipeListView
+      data={favourite}
+      ListHeaderComponent={header}
+      ListFooterComponent={footer}
+      keyExtractor={(item: Product) => item.productId + ""}
+      renderItem={ (data) => (
+        <ProductInCart
+          quality={0}
+          product={data.item}
+        />
+      )}
+      renderHiddenItem={ (data) => (
+        <View style={styles.rowBack}>
+          <TouchableOpacity
+            style={[styles.backRightBtn, styles.backRightBtnRight]}
+            onPress={() => removeFavourite(data.item.productId)}
+          >
+            <Icon type="Feather" name="trash"/>
           </TouchableOpacity>
-          <View>
-            <Text style={styles.headerText}>My Profile</Text>
-          </View>
-          <TouchableOpacity onPress={clickHandler} style={styles.editBtn}>
-            <View>
-              <Icon
-                name="edit"
-                type="Feather"
-                style={{fontSize: 20, color: '#FFFFFF'}}
-              />
-            </View>
-          </TouchableOpacity>
-
         </View>
-        <View style={styles.userDetailContainer}>
-          <View>
-            <TouchableOpacity onPress={updateAVatar}>
-              <Image style={styles.userImage}
-                source={{uri: 'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}} />
-            </TouchableOpacity>
-
-          </View>
-          <View style={{paddingLeft: 20}}>
-            <Text style={{marginTop: 10, fontSize: 20, fontWeight: 'bold'}}>
-              <Text>{userDetail.userName.length > 15 ? userDetail.userName.substring(0, 15) + '...' : userDetail.userName}</Text>
-            </Text>
-            <Text style={{marginTop: 5, fontSize: 15, color: '#D7D7D7'}}>
-              {userDetail.email.length > 30 ? userDetail.email.substring(0, 30) + '...' : userDetail.email}
-            </Text>
-            <Text style={{marginTop: 5, fontSize: 15, color: '#d7d7d7'}}>
-              User ID: {userDetail.userId.length > 30 ? userDetail.userId.substring(0, 30) + '...' : userDetail.userId}</Text>
-          </View>
-        </View>
-      </View>
-      <UserBar userDetail={userDetail} />
-    </Container>
+      )}
+      rightOpenValue={-75}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  flexbox: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
-    marginBottom: 10,
-    flex: 1,
-    alignContent: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  returnBtn: {
-    borderColor: '#272D2F',
-    borderWidth: 0.25,
-    borderRadius: 10,
-    width: 50,
-    height: 50,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  editBtn: {
-    borderRadius: 10,
-    width: 50,
-    height: 50,
-    backgroundColor: '#FFC529',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   headerText: {
     paddingTop: 5,
     fontSize: 25,
     fontWeight: 'bold',
   },
   userDetailContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    marginTop: 100,
+    flexDirection: "row",
+    borderRadius: 10,
+    marginBottom: 10,
     backgroundColor: '#ffffff',
-    marginTop: 50,
     borderColor: '#D7D7D7',
   },
   userImage: {
@@ -126,6 +251,68 @@ const styles = StyleSheet.create({
     width: 100,
     margin: 15,
     borderRadius: 5,
+  },
+  btnLeftPosition: {
+    position: "absolute",
+    top: 20,
+    borderColor: '#272D2F',
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnLeft: {
+    fontSize: 20,
+    padding: 8,
+    borderRadius: 5,
+    backgroundColor: 'white',
+  },
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+  },
+  backRightBtnRight: {
+    right: 10,
+  },
+  flexbox: {
+    flex: 1,
+    marginLeft: 20,
+    marginRight: 20,
+    paddingTop: 20,
+    marginBottom: 10,
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  box1: {
+    borderColor: '#272D2F',
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box2: {
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#FFC529',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
