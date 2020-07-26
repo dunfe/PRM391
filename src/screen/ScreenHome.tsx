@@ -13,7 +13,7 @@ import TabBarIconNotification from "../components/TabBarIcon/TabBarIconNotificat
 import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
 import Search from "./Search";
 import Radio from '../screen/Confirm';
-import { RadioButton } from 'react-native-paper';
+// import { RadioButton } from 'react-native-paper';
 
 const ProductListDis = () => {
   return (

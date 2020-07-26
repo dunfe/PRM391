@@ -51,7 +51,7 @@ export default class RadioButton extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFC529',
     height: 120,
     marginLeft: 20,
     marginRight: 20,

@@ -6,7 +6,6 @@ import {
   Image,
   StyleSheet,
   Text,
-  ImageProps,
   TouchableOpacity,
 } from 'react-native';
 import React, {Component} from 'react';
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFC529',
     // alignItems: 'center',
     marginLeft: 20,
     marginRight: 20,

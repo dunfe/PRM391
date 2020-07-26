@@ -19,7 +19,7 @@ const PROP = [
     text: 'Credit Card',
     cardNumber: '111111111111111',
     imgUri:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png',
+      'https://drive.google.com/file/d/1BUYoTDAGAczKOKvrQs8QEpieYApsFMZs/view',
   },
   {
     key: 'paypal',
