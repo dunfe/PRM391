@@ -44,7 +44,7 @@ const RadioButton = (props: IProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFC529',
+    backgroundColor: '#ffffff',
     height: 120,
     marginLeft: 20,
     marginRight: 20,

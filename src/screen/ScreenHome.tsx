@@ -11,12 +11,8 @@ import TabBarIconCheckout
   from "../components/TabBarIcon/TabBarIconCheckout";
 import TabBarIconUser from "../components/TabBarIcon/TabBarIconUser";
 import Search from "./Search";
-<<<<<<< HEAD
-import Radio from '../screen/Confirm';
 // import { RadioButton } from 'react-native-paper';
-=======
 import Checkout from "./Checkout";
->>>>>>> e7fd94a5edbf94d97d748b65b82acd78b8a13fc8
 
 const Tab = createBottomTabNavigator();
 
