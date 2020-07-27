@@ -3,7 +3,7 @@ import {
   Image,
   StyleSheet,
   Text,
-  TouchableHighlight, TouchableOpacity,
+  TouchableOpacity,
 } from 'react-native';
 import React from 'react';
 import InputSpinner from 'react-native-input-spinner';
@@ -134,6 +134,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    // backgroundColor: '#FFC529',
+    // alignItems: 'center',
     backgroundColor: '#ffffff',
     marginLeft: 20,
     marginRight: 20,

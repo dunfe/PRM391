@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableHighlight,
 } from 'react-native';
+import SvgUri from 'react-native-svg-uri';
 
 interface IProps {
   imgUri: string;
@@ -37,8 +38,11 @@ const Category = (props: IProps) => {
           styles.selectedCategoryStyle :
           styles.categoryStyle}>
         <View style={styles.ViewImage}>
-          <Image source={{uri: thisImage}}
-            style={styles.ImageCategoryStyle} />
+          <View style={styles.ImageCategoryStyle}>
+            <SvgUri source={{uri: thisImage}} height='25' width='25' />
+          </View>
+          {/* <Image source={{uri: thisImage}}
+            style={styles.ImageCategoryStyle} /> */}
         </View>
         <View style={styles.TextCategory}>
           <Text>{props.name}</Text>
