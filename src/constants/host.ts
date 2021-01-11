@@ -1,1 +1,1 @@
-export const host = 'https://phuctrifooddelivery.azurewebsites.net';
+export const host = 'https://foodorderapissg102.azurewebsites.net';
